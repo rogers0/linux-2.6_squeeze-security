@@ -1,0 +1,67 @@
+From: Albin Tonnerre <albin.tonnerre@free-electrons.com>
+Date: Sat, 3 Apr 2010 11:40:28 +0100
+Subject: [PATCH] ARM: 6026/1: ARM: Add support for LZMA-compressed kernel images
+
+commit 6e8699f7d68589e0e9ab324f598a3357bceb40bc upstream.
+
+This patch allows using a kernel image compressed with LZMA on ARM.
+Extracting the image is fairly slow, but it might be useful on machines
+with a very limited amount of storage, as the size benefit is quite
+significant (about 25% smaller with LZMA compared to GZIP)
+
+Tested-by: Martin Michlmayr <tbm@cyrius.com>
+Tested-by: Paulius Zaleckas <paulius.zaleckas@gmail.com>
+Signed-off-by: Albin Tonnerre <albin.tonnerre@free-electrons.com>
+Signed-off-by: Russell King <rmk+kernel@arm.linux.org.uk>
+---
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 95b9905..a42793b 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -19,6 +19,7 @@ config ARM
+ 	select HAVE_FUNCTION_TRACER if (!XIP_KERNEL)
+ 	select HAVE_GENERIC_DMA_COHERENT
+ 	select HAVE_KERNEL_GZIP
++	select HAVE_KERNEL_LZMA
+ 	help
+ 	  The ARM series is a line of low-power-consumption RISC chip designs
+ 	  licensed by ARM Ltd and targeted at embedded applications and
+diff --git a/arch/arm/boot/compressed/Makefile b/arch/arm/boot/compressed/Makefile
+index 10f1173..e538d3d 100644
+--- a/arch/arm/boot/compressed/Makefile
++++ b/arch/arm/boot/compressed/Makefile
+@@ -64,6 +64,7 @@ endif
+ SEDFLAGS	= s/TEXT_START/$(ZTEXTADDR)/;s/BSS_START/$(ZBSSADDR)/
+ 
+ suffix_$(CONFIG_KERNEL_GZIP) = gzip
++suffix_$(CONFIG_KERNEL_LZMA) = lzma
+ 
+ targets       := vmlinux vmlinux.lds \
+ 		 piggy.$(suffix_y) piggy.$(suffix_y).o \
+diff --git a/arch/arm/boot/compressed/misc.c b/arch/arm/boot/compressed/misc.c
+index 669b1b5..efef261 100644
+--- a/arch/arm/boot/compressed/misc.c
++++ b/arch/arm/boot/compressed/misc.c
+@@ -237,6 +237,10 @@ static unsigned long free_mem_end_ptr;
+ #include "../../../../lib/decompress_inflate.c"
+ #endif
+ 
++#ifdef CONFIG_KERNEL_LZMA
++#include "../../../../lib/decompress_unlzma.c"
++#endif
++
+ #ifndef arch_error
+ #define arch_error(x)
+ #endif
+diff --git a/arch/arm/boot/compressed/piggy.lzma.S b/arch/arm/boot/compressed/piggy.lzma.S
+new file mode 100644
+index 0000000..d7e69cf
+--- /dev/null
++++ b/arch/arm/boot/compressed/piggy.lzma.S
+@@ -0,0 +1,6 @@
++	.section .piggydata,#alloc
++	.globl	input_data
++input_data:
++	.incbin	"arch/arm/boot/compressed/piggy.lzma"
++	.globl	input_data_end
++input_data_end:

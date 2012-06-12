@@ -1,0 +1,38 @@
+From: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+Date: Sun, 18 Apr 2010 15:26:36 +0200
+Subject: [PATCH] MIPS: Swarm, Littlesur: Enable PATA platform driver.
+
+commit fcf3ca4c3d6d911df8ee2b8f010ffe504d3aef71 upstream.
+
+According to include/asm/sibyte/swarm.h both systems provide a
+platform device for the ide controler. Until now the IDE subsystem was
+used which is deprecated by now. The same structure can be used with the
+PATA driver.
+
+Signed-off-by: Sebastian Andrzej Siewior <sebatian@breakpoint.cc>
+Cc: tbm@cyrius.com
+Cc: linux-mips@linux-mips.org
+Patchwork: http://patchwork.linux-mips.org/patch/1127/
+Signed-off-by: Ralf Baechle <ralf@linux-mips.org>
+---
+ arch/mips/Kconfig |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -499,6 +499,7 @@ config SIBYTE_SWARM
+ 	bool "Sibyte BCM91250A-SWARM"
+ 	select BOOT_ELF32
+ 	select DMA_COHERENT
++	select HAVE_PATA_PLATFORM
+ 	select NR_CPUS_DEFAULT_2
+ 	select SIBYTE_SB1250
+ 	select SWAP_IO_SPACE
+@@ -513,6 +514,7 @@ config SIBYTE_LITTLESUR
+ 	depends on EXPERIMENTAL
+ 	select BOOT_ELF32
+ 	select DMA_COHERENT
++	select HAVE_PATA_PLATFORM
+ 	select NR_CPUS_DEFAULT_2
+ 	select SIBYTE_SB1250
+ 	select SWAP_IO_SPACE

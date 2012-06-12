@@ -1,0 +1,96 @@
+Package: linux-tools-@version@
+Architecture: amd64 hppa i386 powerpc s390 sh4 sparc sparc64
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: linux-base (>= 2.6.32-16)
+Suggests: linux-doc-@version@
+Description: Performance analysis tools for Linux @upstreamversion@
+ This package contains the 'perf' performance analysis tools for Linux
+ kernel version @upstreamversion@.
+ .
+ The linux-base package contains a 'perf' command which will invoke the
+ appropriate version for the running kernel.
+
+Package: linux-source-@version@
+Architecture: all
+Section: kernel
+Provides: linux-source, linux-source-@major@
+Depends: binutils, bzip2, ${misc:Depends}
+Recommends: libc6-dev | libc-dev, gcc, make
+Suggests: libncurses-dev | ncurses-dev, kernel-package, libqt3-mt-dev
+Description: Linux kernel source for version @version@ with Debian patches
+ This package provides source code for the Linux kernel version @version@.
+ This source closely tracks official Linux kernel releases.  Debian's
+ modifications to that source consist of security fixes, bug fixes, and
+ features that have already been (or are believed to be) accepted by the
+ upstream maintainers.
+
+Package: linux-doc-@version@
+Architecture: all
+Depends: ${misc:Depends}
+Section: doc
+Provides: linux-doc-@major@
+Description: Linux kernel specific documentation for version @version@
+ This package provides the various README files and HTML documentation for
+ the Linux kernel version @version@.  Plenty of information, including the
+ descriptions of various kernel subsystems, filesystems, driver-specific
+ notes and the like.  Consult the file
+ /usr/share/doc/linux-doc-@version@/Documentation/00-INDEX
+ for the detailed description of the contents.
+
+Package: linux-manual-@version@
+Architecture: all
+Depends: ${misc:Depends}
+Section: doc
+Provides: linux-manual, kernel-manual-@major@
+Conflicts: linux-manual, kernel-manual-@major@
+Replaces: linux-manual, kernel-manual-@major@
+Description: Linux kernel API manual pages for version @version@
+ This package provides the Kernel Hacker's Guide in the form of
+ manual pages, describing the kernel API functions.  They
+ are installed into section 9 of the manual.
+ .
+ As the files containing manual pages for different kernel versions
+ are installed in the same location, only one linux-manual package
+ may be installed at a time.  The linux-doc package containing the
+ documentation in other formats is free from such restriction.
+
+Package: linux-patch-debian-@version@
+Architecture: all
+Depends: bzip2, linux-support-@upstreamversion@@abiname@, python, ${misc:Depends}
+Suggests: linux-source-@version@
+Description: Debian patches to version @version@ of the Linux kernel
+ This package includes the patches used to produce the prepackaged
+ linux-source-@version@ package, as well as architecture-specific
+ patches.
+ .
+ Note that these patches do NOT apply against a pristine
+ Linux @version@ kernel but only against the kernel tarball
+ linux-@major@_@source_upstream@.orig.tar.gz from the Debian archive.
+
+Package: firmware-linux-free
+Architecture: all
+Depends: ${misc:Depends}
+Description: Binary firmware for various drivers in the Linux kernel
+ This package contains firmware which was previously included in the
+ Linux kernel and which is compliant with the Debian Free Software
+ Guidelines.
+ .
+ Most firmware previously included in the Linux kernel is non-free
+ and has been moved to the firmware-linux-nonfree package.
+
+Package: linux-support-@upstreamversion@@abiname@
+Architecture: all
+Section: devel
+Depends: ${python:Depends}, ${misc:Depends}
+Description: Support files for Linux @upstreamversion@
+ This package provides support files for the Linux kernel build,
+ e.g. scripts to handle ABI information and for generation of
+ build system meta data.
+
+Package: linux-base
+Architecture: all
+Depends: libuuid-perl, ${misc:Depends}, util-linux (>= 2.16-1) | udev (<< 146-1)
+Description: Linux image base package
+ This package contains files and support scripts for all Linux
+ images.
+

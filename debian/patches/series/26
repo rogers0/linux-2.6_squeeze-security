@@ -1,0 +1,13 @@
++ features/all/xen/pvhvm/0018-xen-do-not-set-xenstored_ready-before-xenbus_probe.patch
++ features/all/xen/pvhvm/0019-xen-do-not-initialize-PV-timers-on-HVM-if-xen_have.patch
++ bugfix/x86/drm-radeon-add-quirk-to-make-HP-nx6125-laptop-resume.patch
++ bugfix/x86/drm-radeon-kms-add-quirk-to-make-HP-DV5000-laptop-resume.patch
++ features/all/dm-crypt-add-plain64-iv.patch
++ bugfix/x86/ahci-ata_generic-let-ata_generic-handle-new-MBP-w-MCP89.patch
++ bugfix/all/ata_generic-implement-ATA_GEN_-flags-and-force-enable-DMA-on-MBP-7,1.patch
++ bugfix/all/ata_generic-drop-hard-coded-DMA-force-logic-for-CENATEK.patch
++ bugfix/all/sata_via-Delay-on-vt6420-when-starting-ATAPI-DMA-write.patch
++ bugfix/all/r6040-fix-r6040_multicast_list.patch
++ bugfix/all/r6040-Fix-multicast-list-iteration.patch
++ bugfix/all/net-rds-remove-kmap_atomic-optimization.patch
++ bugfix/all/v4l-disable-dangerous-buggy-compat-function.patch
