@@ -1,0 +1,127 @@
+commit ae333e97552c81ab10395ad1ffc6d6daaadb144a
+Author: Jeremy Fitzhardinge <jeremy@goop.org>
+Date:   Thu Dec 2 14:31:18 2010 -0800
+
+    vmalloc: eagerly clear ptes on vunmap
+    
+    [ Backport from 64141da587241301ce8638cc945f8b67853156ec, generic flavour parts ]
+    
+    On stock 2.6.37-rc4, running:
+    
+      # mount lilith:/export /mnt/lilith
+      # find  /mnt/lilith/ -type f -print0 | xargs -0 file
+    
+    crashes the machine fairly quickly under Xen.  Often it results in oops
+    messages, but the couple of times I tried just now, it just hung quietly
+    and made Xen print some rude messages:
+    
+        (XEN) mm.c:2389:d80 Bad type (saw 7400000000000001 != exp
+        3000000000000000) for mfn 1d7058 (pfn 18fa7)
+        (XEN) mm.c:964:d80 Attempt to create linear p.t. with write perms
+        (XEN) mm.c:2389:d80 Bad type (saw 7400000000000010 != exp
+        1000000000000000) for mfn 1d2e04 (pfn 1d1fb)
+        (XEN) mm.c:2965:d80 Error while pinning mfn 1d2e04
+    
+    Which means the domain tried to map a pagetable page RW, which would
+    allow it to map arbitrary memory, so Xen stopped it.  This is because
+    vm_unmap_ram() left some pages mapped in the vmalloc area after NFS had
+    finished with them, and those pages got recycled as pagetable pages
+    while still having these RW aliases.
+    
+    Removing those mappings immediately removes the Xen-visible aliases, and
+    so it has no problem with those pages being reused as pagetable pages.
+    Deferring the TLB flush doesn't upset Xen because it can flush the TLB
+    itself as needed to maintain its invariants.
+    
+    When unmapping a region in the vmalloc space, clear the ptes
+    immediately.  There's no point in deferring this because there's no
+    amortization benefit.
+    
+    The TLBs are left dirty, and they are flushed lazily to amortize the
+    cost of the IPIs.
+    
+    This specific motivation for this patch is an oops-causing regression
+    since 2.6.36 when using NFS under Xen, triggered by the NFS client's use
+    of vm_map_ram() introduced in 56e4ebf877b60 ("NFS: readdir with vmapped
+    pages") .  XFS also uses vm_map_ram() and could cause similar problems.
+    
+    Signed-off-by: Jeremy Fitzhardinge <jeremy.fitzhardinge@citrix.com>
+    Cc: Nick Piggin <npiggin@kernel.dk>
+    Cc: Bryan Schumaker <bjschuma@netapp.com>
+    Cc: Trond Myklebust <Trond.Myklebust@netapp.com>
+    Cc: Alex Elder <aelder@sgi.com>
+    Cc: Dave Chinner <david@fromorbit.com>
+    Cc: Christoph Hellwig <hch@lst.de>
+    Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+    Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 4f701c2..80cbd7b 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -566,7 +561,6 @@ static void __purge_vmap_area_lazy(unsigned long *start, unsigned long *end,
+ 			if (va->va_end > *end)
+ 				*end = va->va_end;
+ 			nr += (va->va_end - va->va_start) >> PAGE_SHIFT;
+-			unmap_vmap_area(va);
+ 			list_add_tail(&va->purge_list, &valist);
+ 			va->flags |= VM_LAZY_FREEING;
+ 			va->flags &= ~VM_LAZY_FREE;
+@@ -612,10 +606,11 @@ static void purge_vmap_area_lazy(void)
+ }
+ 
+ /*
+- * Free and unmap a vmap area, caller ensuring flush_cache_vunmap had been
+- * called for the correct range previously.
++ * Free a vmap area, caller ensuring that the area has been unmapped
++ * and flush_cache_vunmap had been called for the correct range
++ * previously.
+  */
+-static void free_unmap_vmap_area_noflush(struct vmap_area *va)
++static void free_vmap_area_noflush(struct vmap_area *va)
+ {
+ 	va->flags |= VM_LAZY_FREE;
+ 	atomic_add((va->va_end - va->va_start) >> PAGE_SHIFT, &vmap_lazy_nr);
+@@ -624,6 +619,16 @@ static void free_unmap_vmap_area_noflush(struct vmap_area *va)
+ }
+ 
+ /*
++ * Free and unmap a vmap area, caller ensuring flush_cache_vunmap had been
++ * called for the correct range previously.
++ */
++static void free_unmap_vmap_area_noflush(struct vmap_area *va)
++{
++	unmap_vmap_area(va);
++	free_vmap_area_noflush(va);
++}
++
++/*
+  * Free and unmap a vmap area
+  */
+ static void free_unmap_vmap_area(struct vmap_area *va)
+@@ -799,7 +804,7 @@ static void free_vmap_block(struct vmap_block *vb)
+ 	spin_unlock(&vmap_block_tree_lock);
+ 	BUG_ON(tmp != vb);
+ 
+-	free_unmap_vmap_area_noflush(vb->va);
++	free_vmap_area_noflush(vb->va);
+ 	call_rcu(&vb->rcu_head, rcu_free_vb);
+ }
+ 
+@@ -936,6 +941,8 @@ static void vb_free(const void *addr, unsigned long size)
+ 	rcu_read_unlock();
+ 	BUG_ON(!vb);
+ 
++	vunmap_page_range((unsigned long)addr, (unsigned long)addr + size);
++
+ 	spin_lock(&vb->lock);
+ 	BUG_ON(bitmap_allocate_region(vb->dirty_map, offset >> PAGE_SHIFT, order));
+ 
+@@ -988,7 +995,6 @@ void vm_unmap_aliases(void)
+ 
+ 				s = vb->va->va_start + (i << PAGE_SHIFT);
+ 				e = vb->va->va_start + (j << PAGE_SHIFT);
+-				vunmap_page_range(s, e);
+ 				flush = 1;
+ 
+ 				if (s < start)

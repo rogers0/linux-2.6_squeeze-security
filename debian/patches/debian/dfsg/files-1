@@ -1,0 +1,68 @@
+rm Documentation/netlabel/draft-ietf-cipso-ipsecurity-01.txt
+
+rm firmware/*.HEX
+rm firmware/*.ihex
+rm firmware/3com
+rm firmware/acenic
+rm firmware/adaptec
+rm firmware/advansys
+rm firmware/bnx2
+rm firmware/cpia2
+rm firmware/cxgb3
+rm firmware/dabusb
+rm firmware/e100
+rm firmware/edgeport
+rm firmware/emi26
+rm firmware/emi62
+rm firmware/ess
+rm firmware/kaweth
+rm firmware/keyspan
+rm firmware/korg
+rm firmware/matrox
+rm firmware/myricom
+rm firmware/ositech
+rm firmware/qlogic
+rm firmware/r128
+rm firmware/radeon
+rm firmware/sb16
+rm firmware/sun
+rm firmware/tehuti
+rm firmware/tigon
+rm firmware/ttusb-budget
+rm firmware/vicam
+rm firmware/yam
+rm firmware/yamaha
+
+rm arch/powerpc/sysdev/micropatch.c
+
+rm drivers/media/dvb/dvb-usb/af9005-script.h
+
+unifdef drivers/media/dvb/frontends/lgs8gxx.c -UREMOVE_DFSG
+
+rm drivers/infiniband/hw/ipath/ipath_sd7220_img.c
+
+rm drivers/net/appletalk/cops.c
+rm drivers/net/appletalk/cops.h
+rm drivers/net/appletalk/cops_ffdrv.h
+rm drivers/net/appletalk/cops_ltdrv.h
+
+unifdef drivers/net/r8169.c -UREMOVE_DFSG
+
+rm drivers/staging/otus/hal/hp*fw*.c*
+
+rm drivers/staging/rt2860/common/firmware.h
+
+rm drivers/staging/rt3070/firmware.h
+
+rm drivers/staging/rt3090/firmware.h
+
+rm drivers/staging/rtl8192su/r8192S_FwImgDTM.h
+rm drivers/staging/rtl8192su/r8192SU_HWImg.c
+rm drivers/staging/rtl8192su/r819xU_firmware_img.c
+
+rm drivers/staging/sxg/sxgphycode-1.2.h
+
+rm drivers/staging/vt6656/firmware.c
+
+rm sound/pci/cs46xx/cs46xx_image.h
+rm sound/pci/cs46xx/imgs

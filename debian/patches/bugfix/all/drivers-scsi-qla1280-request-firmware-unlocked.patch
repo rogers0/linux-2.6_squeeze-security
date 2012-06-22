@@ -1,0 +1,45 @@
+From: Ben Hutchings <ben@decadent.org.uk>
+Date: Sat, 23 Jan 2010 18:40:29 +0000
+Subject: [PATCH] [SCSI] qla1280: Drop host_lock while requesting firmware
+
+commit 2cec802980727f1daa46d8c31b411e083d49d7a2 upstream.
+
+request_firmware() may sleep and it appears to be safe to release the
+spinlock here.
+
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+Cc: stable@kernel.org
+Signed-off-by: James Bottomley <James.Bottomley@suse.de>
+---
+ drivers/scsi/qla1280.c |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/drivers/scsi/qla1280.c b/drivers/scsi/qla1280.c
+index 8371d91..49ac414 100644
+--- a/drivers/scsi/qla1280.c
++++ b/drivers/scsi/qla1280.c
+@@ -1640,8 +1640,10 @@ qla1280_load_firmware_pio(struct scsi_qla_host *ha)
+ 	uint16_t mb[MAILBOX_REGISTER_COUNT], i;
+ 	int err;
+ 
++	spin_unlock_irq(ha->host->host_lock);
+ 	err = request_firmware(&fw, ql1280_board_tbl[ha->devnum].fwname,
+ 			       &ha->pdev->dev);
++	spin_lock_irq(ha->host->host_lock);
+ 	if (err) {
+ 		printk(KERN_ERR "Failed to load image \"%s\" err %d\n",
+ 		       ql1280_board_tbl[ha->devnum].fwname, err);
+@@ -1699,8 +1701,10 @@ qla1280_load_firmware_dma(struct scsi_qla_host *ha)
+ 		return -ENOMEM;
+ #endif
+ 
++	spin_unlock_irq(ha->host->host_lock);
+ 	err = request_firmware(&fw, ql1280_board_tbl[ha->devnum].fwname,
+ 			       &ha->pdev->dev);
++	spin_lock_irq(ha->host->host_lock);
+ 	if (err) {
+ 		printk(KERN_ERR "Failed to load image \"%s\" err %d\n",
+ 		       ql1280_board_tbl[ha->devnum].fwname, err);
+-- 
+1.7.1
+

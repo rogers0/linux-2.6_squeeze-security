@@ -1,0 +1,95 @@
+From: Ben Hutchings <ben@decadent.org.uk>
+Date: Mon, 18 Jan 2010 02:50:24 +0000
+Subject: [PATCH] Staging: rt2870sta: constify RTUSBMultiWrite(), RTUSBFirmwareWrite()
+
+commit 8838d2560a8ccbc5e03688d55bf075793b36a04e upstream.
+
+These functions do not modify the data they are passed.
+
+Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+Signed-off-by: Greg Kroah-Hartman <gregkh@suse.de>
+---
+ drivers/staging/rt2860/rtmp.h            |    6 +++---
+ drivers/staging/rt2870/common/rtusb_io.c |   10 +++++-----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/staging/rt2860/rtmp.h b/drivers/staging/rt2860/rtmp.h
+index 90fd40f..d283256 100644
+--- a/drivers/staging/rt2860/rtmp.h
++++ b/drivers/staging/rt2860/rtmp.h
+@@ -6095,13 +6095,13 @@ NTSTATUS RTUSBMultiRead(
+ NTSTATUS RTUSBMultiWrite(
+ 	IN	PRTMP_ADAPTER	pAd,
+ 	IN	USHORT			Offset,
+-	IN	PUCHAR			pData,
++	IN	const u8		*pData,
+ 	IN	USHORT			length);
+ 
+ NTSTATUS RTUSBMultiWrite_OneByte(
+ 	IN	PRTMP_ADAPTER	pAd,
+ 	IN	USHORT			Offset,
+-	IN	PUCHAR			pData);
++	IN	const u8		*pData);
+ 
+ NTSTATUS RTUSBReadBBPRegister(
+ 	IN	PRTMP_ADAPTER	pAd,
+@@ -6220,7 +6220,7 @@ NTSTATUS RTUSBFirmwareRun(
+ 
+ NTSTATUS RTUSBFirmwareWrite(
+ 	IN PRTMP_ADAPTER pAd,
+-	IN PUCHAR		pFwImage,
++	IN const u8		*pFwImage,
+ 	IN ULONG		FwLen);
+ 
+ NTSTATUS	RTUSBFirmwareOpmode(
+diff --git a/drivers/staging/rt2870/common/rtusb_io.c b/drivers/staging/rt2870/common/rtusb_io.c
+index 1d69590..1f776c4 100644
+--- a/drivers/staging/rt2870/common/rtusb_io.c
++++ b/drivers/staging/rt2870/common/rtusb_io.c
+@@ -92,7 +92,7 @@ NTSTATUS	RTUSBFirmwareRun(
+ */
+ NTSTATUS RTUSBFirmwareWrite(
+ 	IN PRTMP_ADAPTER pAd,
+-	IN PUCHAR		pFwImage,
++	IN const u8		*pFwImage,
+ 	IN ULONG		FwLen)
+ {
+ 	UINT32		MacReg;
+@@ -224,7 +224,7 @@ NTSTATUS	RTUSBMultiRead(
+ NTSTATUS	RTUSBMultiWrite_OneByte(
+ 	IN	PRTMP_ADAPTER	pAd,
+ 	IN	USHORT			Offset,
+-	IN	PUCHAR			pData)
++	IN	const u8		*pData)
+ {
+ 	NTSTATUS	Status;
+ 
+@@ -236,7 +236,7 @@ NTSTATUS	RTUSBMultiWrite_OneByte(
+ 		0x6,
+ 		0,
+ 		Offset,
+-		pData,
++		(u8 *)pData,
+ 		1);
+ 
+ 	return Status;
+@@ -245,14 +245,14 @@ NTSTATUS	RTUSBMultiWrite_OneByte(
+ NTSTATUS	RTUSBMultiWrite(
+ 	IN	PRTMP_ADAPTER	pAd,
+ 	IN	USHORT			Offset,
+-	IN	PUCHAR			pData,
++	IN	const u8		*pData,
+ 	IN	USHORT			length)
+ {
+ 	NTSTATUS	Status;
+ 
+ 
+         USHORT          index = 0,Value;
+-        PUCHAR          pSrc = pData;
++        const u8        *pSrc = pData;
+         USHORT          resude = 0;
+ 
+         resude = length % 2;
+-- 
+1.6.6
+

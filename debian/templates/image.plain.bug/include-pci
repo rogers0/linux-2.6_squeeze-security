@@ -1,0 +1,16 @@
+add_pci() {
+  echo '** PCI devices:' >&3
+  if command -v lspci > /dev/null; then
+    lspci -nnvv >&3
+  else
+    echo 'not available' >&3
+  fi
+  echo >&3
+}
+
+ask_pci() {
+  # This information shouldn't vary much between kernel versions, so
+  # include it anyway.
+  test $same_system = nop || add_pci
+}
+

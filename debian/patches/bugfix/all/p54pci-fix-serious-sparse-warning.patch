@@ -1,0 +1,37 @@
+From: Christian Lamparter <chunkeey@googlemail.com>
+Date: Thu, 15 Apr 2010 14:17:07 +0200
+Subject: [PATCH] p54pci: fix serious sparse warning
+
+commit 103823db62ffca028c7a214c80266519d2ea7d8d upstream.
+
+This patch fixes a bug which was just recently introduced by
+("p54pci: prevent stuck rx-ring on slow system").
+
+make M=drivers/net/wireless/p54 C=2 CF=-D__CHECK_ENDIAN__
+  CHECK   drivers/net/wireless/p54/p54pci.c
+drivers/net/wireless/p54/p54pci.c:143:11: warning: cast to restricted __le32
+  CC [M]  drivers/net/wireless/p54/p54pci.o
+
+Reported-by: Johannes Berg <johannes@sipsolutions.net>
+Signed-off-by: Christian Lamparter <chunkeey@googlemail.com>
+Signed-off-by: John W. Linville <linville@tuxdriver.com>
+---
+ drivers/net/wireless/p54/p54pci.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/drivers/net/wireless/p54/p54pci.c b/drivers/net/wireless/p54/p54pci.c
+index aa29663..0a516c8 100644
+--- a/drivers/net/wireless/p54/p54pci.c
++++ b/drivers/net/wireless/p54/p54pci.c
+@@ -139,7 +139,7 @@ static void p54p_refill_rx_ring(struct ieee80211_hw *dev,
+ 
+ 	idx = le32_to_cpu(ring_control->host_idx[ring_index]);
+ 	limit = idx;
+-	limit -= le32_to_cpu(index);
++	limit -= index;
+ 	limit = ring_limit - limit;
+ 
+ 	i = idx % ring_limit;
+-- 
+1.7.1
+
