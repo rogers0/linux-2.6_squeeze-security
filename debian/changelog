@@ -1,6 +1,42 @@
-linux-2.6 (2.6.32-45squeeze1) UNRELEASED; urgency=low
+linux-2.6 (2.6.32-46) stable; urgency=high
+
+  [ Bastian Blank ]
+  * [s390] Enable IUCV special message support. (closes: #671238)
+
+  [ Ben Hutchings ]
+  * linux-image: Relax version dependency on linux-base, to simplify
+    testing of bug fixes
+  * [x86] linux-image: Fix minimum version of lilo (Closes: #680467)
+  * [openvz] proc: Fix extreme memory use for /proc/self/mountinfo in
+    container, thanks to Andrew Vagin, Christoph Lechleitner (Closes: #655385)
+  * usb: Fix deadlock in hid_reset when Dell iDRAC is reset (Closes: #670398)
+  * drm: Apply changes deferred from 2.6.32.42+drm33.19:
+    - drm: implement helper functions for scanning lru list
+    - drm/i915: Implement fair lru eviction across both rings. (v2)
+    - drm/i915: Maintain LRU order of inactive objects upon access by CPU (v2)
+    - drm/i915/evict: Ensure we completely cleanup on failure
+  * Add drm changes from 2.6.32.46+drm33.20, 2.6.32.48+drm33.21,
+    2.6.32.56+drm33.22, 2.6.32.57+drm33.23, 2.6.32.58+drm33.24
+    (Closes: #681632) including:
+    - drm/radeon/kms: prefer high post dividers in legacy pll algo
+      (Closes: #575893)
+    - drm: mm: fix range restricted allocations (regression in 2.6.32-36)
+    - drm/i915: no lvds quirk for AOpen MP45
+  * [armel/kirkwood] ahci: Add JMicron 362 device IDs (Closes: #634180)
+  * tcp: Don't change unlocked socket state in tcp_v4_err(). (Closes: #685087)
+  * locks: fix checking of fcntl_setlease argument
+  * sfc: Fix maximum number of TSO segments and minimum TX queue size
+    (CVE-2012-3412)
+
+  [ Jonathan Nieder ]
+  * ath5k: initialize default noise floor
+  * ath5k: use noise calibration from madwifi hal (Closes: #611107)
+  * sky2: Add 'legacy_pme' option for PCI legacy power management
+    (Closes: #647560; works around regression introduced in 2.6.32-22)
 
   [ dann frazier ]
+  * Avoid leap second deadlock and early hrtimer/futex expiration issue
+    (Closes: #679882)
   * net: sock: validate data_len before allocating skb in
     sock_alloc_send_pskb() (CVE-2012-2136)
   * dl2k: Clean up rio_ioctl, add missing CAP_NET_ADMIN checks (CVE-2012-2313)
@@ -10,14 +46,9 @@ linux-2.6 (2.6.32-45squeeze1) UNRELEASED; urgency=low
   * cred: copy_process() should clear child->replacement_session_keyring
     (CVE-2012-2745)
   * udf: Fix buffer overflow when parsing sparing table (CVE-2012-3400)
+  * rds: set correct msg_namelen (CVE-2012-3430)
 
-  [ Ben Hutchings ]
-  * tcp: Don't change unlocked socket state in tcp_v4_err(). (Closes: #685087)
-  * locks: fix checking of fcntl_setlease argument
-  * sfc: Fix maximum number of TSO segments and minimum TX queue size
-    (CVE-2012-3412)
-
- -- dann frazier <dannf@debian.org>  Tue, 12 Jun 2012 16:56:29 -0600
+ -- dann frazier <dannf@debian.org>  Sun, 23 Sep 2012 04:22:37 +0900
 
 linux-2.6 (2.6.32-45) stable; urgency=high
 
