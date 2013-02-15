@@ -1,0 +1,24 @@
+hid
+usbhid
+hid-a4tech ?
+hid-apple ?
+hid-belkin ?
+hid-cherry ?
+hid-cypress ?
+hid-ezkey ?
+hid-kensington ?
+hid-keytouch ?
+hid-kye ?
+hid-logitech ?
+hid-logitech-dj
+hid-microsoft ?
+hid-monterey ?
+hid-multitouch ?
+hid-ortek ?
+hid-primax ?
+hid-quanta ?
+hid-samsung ?
+hid-speedlink ?
+hid-sunplus ?
+synaptics_usb ?
+wistron_btns ?

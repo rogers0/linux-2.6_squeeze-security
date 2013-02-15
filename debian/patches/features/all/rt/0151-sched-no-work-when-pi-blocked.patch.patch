@@ -1,0 +1,59 @@
+From 799a585638f8e6c508b5ba17a0037cec1335e481 Mon Sep 17 00:00:00 2001
+From: Thomas Gleixner <tglx@linutronix.de>
+Date: Sun, 17 Jul 2011 20:46:52 +0200
+Subject: [PATCH 151/298] sched-no-work-when-pi-blocked.patch
+
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+---
+ include/linux/sched.h |    8 ++++++++
+ kernel/sched.c        |    5 ++++-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 08f5c5b..96bfec9 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -2107,12 +2107,20 @@ extern unsigned int sysctl_sched_cfs_bandwidth_slice;
+ extern int rt_mutex_getprio(struct task_struct *p);
+ extern void rt_mutex_setprio(struct task_struct *p, int prio);
+ extern void rt_mutex_adjust_pi(struct task_struct *p);
++static inline bool tsk_is_pi_blocked(struct task_struct *tsk)
++{
++	return tsk->pi_blocked_on != NULL;
++}
+ #else
+ static inline int rt_mutex_getprio(struct task_struct *p)
+ {
+ 	return p->normal_prio;
+ }
+ # define rt_mutex_adjust_pi(p)		do { } while (0)
++static inline bool tsk_is_pi_blocked(struct task_struct *tsk)
++{
++	return false;
++}
+ #endif
+ 
+ extern bool yield_to(struct task_struct *p, bool preempt);
+diff --git a/kernel/sched.c b/kernel/sched.c
+index bdb2d80..5add350 100644
+--- a/kernel/sched.c
++++ b/kernel/sched.c
+@@ -4653,7 +4653,7 @@ need_resched:
+ 
+ static inline void sched_submit_work(struct task_struct *tsk)
+ {
+-	if (!tsk->state)
++	if (!tsk->state || tsk_is_pi_blocked(tsk))
+ 		return;
+ 
+ 	/*
+@@ -4673,6 +4673,9 @@ static inline void sched_submit_work(struct task_struct *tsk)
+ 
+ static inline void sched_update_worker(struct task_struct *tsk)
+ {
++	if (tsk_is_pi_blocked(tsk))
++		return;
++
+ 	if (tsk->flags & PF_WQ_WORKER)
+ 		wq_worker_running(tsk);
+ }
