@@ -1,0 +1,14 @@
+From: Ben Hutchings <ben@decadent.org.uk>
+
+[Included in commit fc4a7f93087a48619005111895dcaa115f807399 upstream.]
+
+--- a/drivers/media/dvb/dvb-usb/Kconfig
++++ b/drivers/media/dvb/dvb-usb/Kconfig
+@@ -113,6 +113,7 @@
+ 	select DVB_ZL10353 if !DVB_FE_CUSTOMISE
+ 	select DVB_DIB7000P if !DVB_FE_CUSTOMISE
+ 	select DVB_LGS8GL5 if !DVB_FE_CUSTOMISE
++	select DVB_LGS8GXX if !DVB_FE_CUSTOMISE
+ 	select DVB_TUNER_DIB0070 if !DVB_FE_CUSTOMISE
+ 	select MEDIA_TUNER_SIMPLE if !MEDIA_TUNER_CUSTOMISE
+ 	select MEDIA_TUNER_XC2028 if !MEDIA_TUNER_CUSTOMISE

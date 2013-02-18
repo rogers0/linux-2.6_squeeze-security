@@ -1,0 +1,99 @@
+[abi]
+abiname: 5
+ignore-changes:
+ module:arch/s390/kvm/kvm
+ module:arch/x86/kvm/kvm
+ module:drivers/net/wireless/iwlwifi/*
+ module:fs/fuse/fuse
+ __scm_*
+ scm_*
+ hisax_init_pcmcia
+ clocksource_*
+
+[base]
+arches:
+ alpha
+ amd64
+ armel
+ hppa
+ i386
+ ia64
+ m68k
+ mips
+ mipsel
+ powerpc
+ s390
+ sh4
+ sparc
+ sparc64
+compiler: gcc-4.3
+featuresets:
+ none
+ openvz
+ vserver
+ xen
+
+[featureset-openvz_base]
+enabled: true
+
+[featureset-vserver_base]
+enabled: true
+
+[featureset-xen_base]
+enabled: true
+
+[description]
+part-long-xen: This kernel also runs on a Xen hypervisor.
+ It supports only unprivileged (domU) operation.
+
+[image]
+initramfs-generators: initramfs-tools initramfs-fallback
+type: plain
+
+[commands-image-initramfs-generators]
+initramfs-tools: update-initramfs
+
+[relations]
+# compilers
+gcc-4.3: gcc-4.3
+
+# initramfs-generators
+initramfs-fallback: linux-initramfs-tool
+initramfs-tools: initramfs-tools (>= 0.55)
+
+# bootloaders
+elilo: elilo (>= 3.12-3.1~)
+lilo: lilo (>= 1:22.8-8.2~)
+s390-tools: s390-tools (>= 1.8.3-2~)
+
+[backports]
+drivers/block/drbd/: 2.6.33
+drivers/gpu/drm/: 2.6.33
+drivers/hwmon/via-cputemp.c: 2.6.33
+drivers/net/sfc/: 2.6.33
+drivers/scsi/3w-sas.c: 2.6.33
+drivers/scsi/3w-sas.h: 2.6.33
+drivers/staging/ramzswap/: 2.6.33
+drivers/media/dvb/mantis/: 2.6.34
+drivers/net/e1000e/: 2.6.38
+drivers/net/igb/: 3.0
+drivers/net/igbvf/: 3.0
+drivers/net/macvtap.c: 2.6.34
+drivers/net/r8169.c: 3.0
+drivers/net/sky2.c: 2.6.35
+drivers/net/sky2.h: 2.6.35
+drivers/net/tg3.c: 2.6.38
+drivers/net/tg3.h: 2.6.38
+drivers/net/usb/ipheth.c: 2.6.34
+drivers/scsi/isci/: 3.1
+drivers/staging/brcm80211/: 2.6.37
+drivers/staging/rt2860/: 2.6.34
+drivers/staging/rt2870/: 2.6.34
+drivers/staging/rtl8192su/: 2.6.34
+drivers/staging/rtl8192u/: 2.6.34
+drivers/staging/samsung-laptop/: 2.6.35
+drivers/staging/udlfb/: 2.6.37
+drivers/usb/serial/usb_wwan.c: 2.6.34
+drivers/usb/serial/usb-wwan.h: 2.6.34
+drivers/staging/xgifb/: 2.6.35
+include/drm/: 2.6.33

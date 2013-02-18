@@ -1,0 +1,75 @@
+# OpenVZ doesn't use sock_alloc_send_pskb().  It replaces it with
+# sock_alloc_send_skb2(), which doesn't seem to need this fix.
+- bugfix/all/net-sock-validate-data_len-before-allocating-skb-in-sock_alloc_send_pskb.patch featureset=openvz
+- bugfix/all/sched-work-around-sched_group-cpu_power-0.patch featureset=openvz
++ debian/revert-sched-changes-in-2.6.32.29.patch featureset=openvz
++ debian/revert-cfq-changes-in-2.6.32.47.patch featureset=openvz
++ features/all/openvz/openvz.patch featureset=openvz
++ features/all/openvz/0001-sunrpc-ve-semaphore-deadlock-fixed.patch featureset=openvz
++ features/all/openvz/0002-venfs-Backport-some-patches-from-rhel6-branch.patch featureset=openvz
++ features/all/openvz/0003-VE-shutdown-environment-only-if-VE-pid-ns-is-destroy.patch featureset=openvz
++ features/all/openvz/0004-net-decriment-unix_nr_socks-if-ub_other_sock_charge-.patch featureset=openvz
++ features/all/openvz/0005-ve-Fix-d_path-return-code-when-no-buffer-given.patch featureset=openvz
++ features/all/openvz/ptrace_dont_allow_process_without_memory_map_v2.patch featureset=openvz
++ features/all/openvz/cpt-Allow-ext4-mount.patch featureset=openvz
++ features/all/openvz/proc-self-mountinfo.patch featureset=openvz
+
++ features/all/vserver/revert-fix-cputime-overflow-in-uptime_proc_show.patch featureset=vserver
++ features/all/vserver/vs2.3.0.36.29.8.patch featureset=vserver
++ features/all/vserver/vserver-complete-fix-for-CVE-2010-4243.patch featureset=vserver
++ features/all/vserver/vserver-Wire-up-syscall-on-powerpc.patch featureset=vserver
+
++ features/all/xen/pvops.patch featureset=xen
++ features/all/xen/xen-netfront-make-smartpoll-optional-and-default-off.patch featureset=xen
++ features/all/xen/xen-grant-table-do-not-truncate-machine-address-on-g.patch featureset=xen
++ features/all/xen/Fix-one-race-condition-for-netfront-smartpoll-logic.patch featureset=xen
++ features/all/xen/xen-netfront-Fix-another-potential-race-condition.patch featureset=xen
++ features/all/xen/xen-netfront-unconditionally-initialize-smartpoll-hr.patch featureset=xen
++ features/all/xen/xen-allocate-irq-descs-on-any-NUMA-node.patch featureset=xen
++ features/all/xen/xen-disable-ACPI-NUMA-for-PV-guests.patch featureset=xen
++ features/all/xen/xen-acpi-Add-cpu-hotplug-support.patch featureset=xen
++ features/all/xen/fbmem-VM_IO-set-but-not-propagated.patch featureset=xen
++ features/all/xen/ttm-Set-VM_IO-only-on-pages-with-TTM_MEMTYPE_FLAG_N.patch featureset=xen
++ features/all/xen/ttm-Change-VMA-flags-if-they-to-the-TTM-flags.patch featureset=xen
++ features/all/xen/drm-ttm-Add-ttm_tt_free_page.patch featureset=xen
++ features/all/xen/ttm-Introduce-a-placeholder-for-DMA-bus-addresses.patch featureset=xen
++ features/all/xen/ttm-Utilize-the-dma_addr_t-array-for-pages-that-are.patch featureset=xen
++ features/all/xen/ttm-Expand-populate-to-support-an-array-of-DMA-a.patch featureset=xen
++ features/all/xen/radeon-ttm-PCIe-Use-dma_addr-if-TTM-has-set-it.patch featureset=xen
++ features/all/xen/nouveau-ttm-PCIe-Use-dma_addr-if-TTM-has-set-it.patch featureset=xen
++ features/all/xen/radeon-PCIe-Use-the-correct-index-field.patch featureset=xen
++ features/all/xen/xen-netback-Drop-GSO-SKBs-which-do-not-have-csum_b.patch featureset=xen
++ features/all/xen/xen-blkback-CVE-2010-3699.patch featureset=xen
++ features/all/xen/xen-do-not-release-any-memory-under-1M-in-domain-0.patch featureset=xen
++ features/all/xen/x86-mm-Hold-mm-page_table_lock-while-doing-vmalloc_s.patch featureset=xen
++ features/all/xen/x86-mm-Fix-incorrect-data-type-in-vmalloc_sync_all.patch featureset=xen
++ features/all/xen/vmalloc-eagerly-clear-ptes-on-vunmap.patch featureset=xen
+
++ features/all/xen/xen-apic-use-handle_edge_irq-for-pirq-events.patch featureset=xen
++ features/all/xen/xen-pirq-do-EOI-properly-for-pirq-events.patch featureset=xen
++ features/all/xen/xen-use-dynamic_irq_init_keep_chip_data.patch featureset=xen
++ features/all/xen/xen-events-change-to-using-fasteoi.patch featureset=xen
++ features/all/xen/xen-make-pirq-interrupts-use-fasteoi.patch featureset=xen
++ features/all/xen/xen-evtchn-rename-enable-disable_dynirq-unmask-mask_.patch featureset=xen
++ features/all/xen/xen-evtchn-rename-retrigger_dynirq-irq.patch featureset=xen
++ features/all/xen/xen-evtchn-make-pirq-enable-disable-unmask-mask.patch featureset=xen
++ features/all/xen/xen-evtchn-pirq_eoi-does-unmask.patch featureset=xen
++ features/all/xen/xen-evtchn-correction-pirq-hypercall-does-not-unmask.patch featureset=xen
++ features/all/xen/xen-events-use-PHYSDEVOP_pirq_eoi_gmfn-to-get-pirq-n.patch featureset=xen
++ features/all/xen/xen-pirq-use-eoi-as-enable.patch featureset=xen
++ features/all/xen/xen-pirq-use-fasteoi-for-MSI-too.patch featureset=xen
++ features/all/xen/xen-apic-fix-pirq_eoi_gmfn-resume.patch featureset=xen
++ features/all/xen/xen-set-up-IRQ-before-binding-virq-to-evtchn.patch featureset=xen
++ features/all/xen/xen-correct-parameter-type-for-pirq_eoi.patch featureset=xen
++ features/all/xen/xen-evtchn-clear-secondary-CPUs-cpu_evtchn_mask-afte.patch featureset=xen
++ features/all/xen/xen-events-use-locked-set-clear_bit-for-cpu_evtchn_m.patch featureset=xen
++ features/all/xen/xen-events-only-unmask-irq-if-enabled.patch featureset=xen
++ features/all/xen/xen-events-Process-event-channels-notifications-in-r.patch featureset=xen
++ features/all/xen/xen-events-Make-last-processed-event-channel-a-per-c.patch featureset=xen
++ features/all/xen/xen-events-Clean-up-round-robin-evtchn-scan.patch featureset=xen
++ features/all/xen/xen-events-Make-round-robin-scan-fairer-by-snapshott.patch featureset=xen
++ features/all/xen/xen-events-Remove-redundant-clear-of-l2i-at-end-of-r.patch featureset=xen
++ features/all/xen/xen-do-not-try-to-allocate-the-callback-vector-again.patch featureset=xen
++ features/all/xen/xen-improvements-to-VIRQ_DEBUG-output.patch featureset=xen
+
++ features/all/xen/xen-blkback-don-t-fail-empty-barrier-requests.patch featureset=xen

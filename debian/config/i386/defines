@@ -1,0 +1,61 @@
+[abi]
+ignore-changes:
+ smp_ops
+
+[base]
+featuresets:
+ openvz
+ vserver
+ xen
+flavours:
+ 486
+ 686
+ 686-bigmem
+ amd64
+kernel-arch: x86
+
+[image]
+bootloaders: grub lilo
+configs:
+ kernelarch-x86/config
+
+[486_description]
+hardware: old PCs
+hardware-long: PCs with a 486, Pentium or compatible processor
+
+[486_image]
+configs:
+ kernelarch-x86/config-arch-32
+
+[686_description]
+hardware: modern PCs
+hardware-long: PCs with Intel Pentium Pro/II/III/4/4M/D/M, Xeon, Celeron, Core or Atom; AMD Geode LX/NX, Athlon (K7), Duron, Opteron, Sempron, Turion or Phenom; Transmeta Efficeon; VIA C3 "Nehemiah" or C7 processors
+
+[686_image]
+configs:
+ kernelarch-x86/config-arch-32
+recommends: libc6-i686
+
+[686-bigmem_description]
+hardware: PCs with 4GB+ RAM
+hardware-long: PCs with 4-64GB RAM, using PAE (Physical Address Extension)
+parts: xen
+
+[686-bigmem_image]
+configs:
+ kernelarch-x86/config-arch-32
+recommends: libc6-i686
+
+[686-bigmem_image-dbg]
+enabled: true
+
+[amd64_description]
+hardware: 64-bit PCs
+hardware-long: PCs with AMD64 or Intel 64 processors
+parts: xen
+
+[amd64_image]
+configs:
+ kernelarch-x86/config-arch-64
+recommends: libc6-i686
+

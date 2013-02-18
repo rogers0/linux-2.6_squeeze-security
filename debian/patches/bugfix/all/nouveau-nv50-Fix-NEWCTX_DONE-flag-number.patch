@@ -1,0 +1,35 @@
+From: Marcin Kościelnicki <koriakin@0x04.net>
+Date: Wed, 17 Mar 2010 00:58:47 +0000
+Subject: [PATCH] drm/nv50: Fix NEWCTX_DONE flag number
+
+commit 0dd8c3f093e3d0cab2cc967f9620b41a125f1f56 upstream.
+
+Signed-off-by: Marcin Kościelnicki <koriakin@0x04.net>
+Signed-off-by: Ben Skeggs <bskeggs@redhat.com>
+---
+ drivers/gpu/drm/nouveau/nv50_grctx.c |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/nouveau/nv50_grctx.c b/drivers/gpu/drm/nouveau/nv50_grctx.c
+index 546b319..3c3cc46 100644
+--- a/drivers/gpu/drm/nouveau/nv50_grctx.c
++++ b/drivers/gpu/drm/nouveau/nv50_grctx.c
+@@ -55,12 +55,12 @@
+ #define CP_FLAG_AUTO_LOAD             ((2 * 32) + 5)
+ #define CP_FLAG_AUTO_LOAD_NOT_PENDING 0
+ #define CP_FLAG_AUTO_LOAD_PENDING     1
++#define CP_FLAG_NEWCTX                ((2 * 32) + 10)
++#define CP_FLAG_NEWCTX_BUSY           0
++#define CP_FLAG_NEWCTX_DONE           1
+ #define CP_FLAG_XFER                  ((2 * 32) + 11)
+ #define CP_FLAG_XFER_IDLE             0
+ #define CP_FLAG_XFER_BUSY             1
+-#define CP_FLAG_NEWCTX                ((2 * 32) + 12)
+-#define CP_FLAG_NEWCTX_BUSY           0
+-#define CP_FLAG_NEWCTX_DONE           1
+ #define CP_FLAG_ALWAYS                ((2 * 32) + 13)
+ #define CP_FLAG_ALWAYS_FALSE          0
+ #define CP_FLAG_ALWAYS_TRUE           1
+-- 
+1.7.0.3
+
