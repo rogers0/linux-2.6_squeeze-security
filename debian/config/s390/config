@@ -1,16 +1,17 @@
 ##
 ## file: arch/s390/Kconfig
 ##
+CONFIG_COMPAT=y
 CONFIG_SMP=y
 CONFIG_NR_CPUS=32
 CONFIG_HOTPLUG_CPU=y
 CONFIG_MATHEMU=y
-CONFIG_COMPAT=y
 CONFIG_PACK_STACK=y
 # CONFIG_SMALL_STACK is not set
 # CONFIG_CHECK_STACK is not set
 CONFIG_QDIO=y
-CONFIG_IPL=y
+# CONFIG_ZFCPDUMP is not set
+CONFIG_SECCOMP=y
 CONFIG_PFAULT=y
 # CONFIG_SHARED_KERNEL is not set
 CONFIG_CMM=y
@@ -20,16 +21,19 @@ CONFIG_APPLDATA_MEM=m
 CONFIG_APPLDATA_OS=m
 CONFIG_APPLDATA_NET_SUM=m
 CONFIG_S390_HYPFS_FS=y
-CONFIG_KEXEC=y
-# CONFIG_ZFCPDUMP is not set
 CONFIG_S390_GUEST=y
-CONFIG_SECCOMP=y
 
 ##
 ## file: arch/s390/kvm/Kconfig
 ##
 CONFIG_VIRTUALIZATION=y
 CONFIG_KVM=m
+
+##
+## file: block/partitions/Kconfig
+##
+CONFIG_IBM_PARTITION=y
+CONFIG_BSD_DISKLABEL=y
 
 ##
 ## file: drivers/block/Kconfig
@@ -41,7 +45,6 @@ CONFIG_BLK_DEV_RAM_SIZE=24576
 ## file: drivers/crypto/Kconfig
 ##
 CONFIG_ZCRYPT=m
-# CONFIG_ZCRYPT_MONOLITHIC is not set
 CONFIG_CRYPTO_SHA1_S390=m
 CONFIG_CRYPTO_SHA256_S390=m
 CONFIG_CRYPTO_SHA512_S390=m
@@ -142,12 +145,6 @@ CONFIG_HVC_IUCV=y
 CONFIG_ZVM_WATCHDOG=m
 
 ##
-## file: fs/partitions/Kconfig
-##
-CONFIG_IBM_PARTITION=y
-CONFIG_BSD_DISKLABEL=y
-
-##
 ## file: mm/Kconfig
 ##
 ## choice: Memory model
@@ -165,11 +162,6 @@ CONFIG_SPARSEMEM_MANUAL=y
 ## file: net/decnet/Kconfig
 ##
 # CONFIG_DECNET is not set
-
-##
-## file: net/ipv6/Kconfig
-##
-CONFIG_IPV6=y
 
 ##
 ## file: net/ipx/Kconfig

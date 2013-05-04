@@ -7,10 +7,8 @@ CONFIG_MIPS_COBALT=y
 # CONFIG_MACH_JAZZ is not set
 # CONFIG_LASAT is not set
 # CONFIG_MIPS_MALTA is not set
-# CONFIG_MIPS_SIM is not set
 # CONFIG_MACH_VR41XX is not set
 # CONFIG_PNX8550_JBS is not set
-# CONFIG_PMC_YOSEMITE is not set
 # CONFIG_SGI_IP22 is not set
 # CONFIG_SGI_IP27 is not set
 # CONFIG_SGI_IP32 is not set
@@ -41,7 +39,6 @@ CONFIG_CPU_NEVADA=y
 # CONFIG_CPU_R8000 is not set
 # CONFIG_CPU_R10000 is not set
 # CONFIG_CPU_RM7000 is not set
-# CONFIG_CPU_RM9000 is not set
 # CONFIG_CPU_SB1 is not set
 ## end choice
 ## choice: Kernel code model
@@ -61,18 +58,7 @@ CONFIG_PCI=y
 ##
 ## choice: Machine type
 # CONFIG_MIPS_MTX1 is not set
-# CONFIG_MIPS_BOSPORUS is not set
 # CONFIG_MIPS_DB1000 is not set
-# CONFIG_MIPS_DB1100 is not set
-# CONFIG_MIPS_DB1200 is not set
-# CONFIG_MIPS_DB1500 is not set
-# CONFIG_MIPS_DB1550 is not set
-# CONFIG_MIPS_MIRAGE is not set
-# CONFIG_MIPS_PB1000 is not set
-# CONFIG_MIPS_PB1100 is not set
-# CONFIG_MIPS_PB1200 is not set
-# CONFIG_MIPS_PB1500 is not set
-# CONFIG_MIPS_PB1550 is not set
 # CONFIG_MIPS_XXS1500 is not set
 ## end choice
 
@@ -87,6 +73,11 @@ CONFIG_CMDLINE=""
 # CONFIG_TOSHIBA_JMR3927 is not set
 # CONFIG_TOSHIBA_RBTX4927 is not set
 # CONFIG_TOSHIBA_RBTX4938 is not set
+
+##
+## file: block/partitions/Kconfig
+##
+CONFIG_MSDOS_PARTITION=y
 
 ##
 ## file: drivers/ata/Kconfig
@@ -110,7 +101,6 @@ CONFIG_PATA_PLATFORM=y
 # CONFIG_BLK_DEV_DAC960 is not set
 # CONFIG_BLK_DEV_UMEM is not set
 # CONFIG_BLK_DEV_SX8 is not set
-# CONFIG_BLK_DEV_UB is not set
 CONFIG_BLK_DEV_RAM_SIZE=8192
 # CONFIG_CDROM_PKTCDVD is not set
 
@@ -260,40 +250,34 @@ CONFIG_ISDN_DIVAS_MAINT=m
 ##
 ## file: drivers/leds/Kconfig
 ##
-CONFIG_NEW_LEDS=y
-CONFIG_LEDS_CLASS=y
 CONFIG_LEDS_COBALT_QUBE=y
 CONFIG_LEDS_COBALT_RAQ=y
 
 ##
+## file: drivers/media/parport/Kconfig
+##
+# CONFIG_MEDIA_PARPORT_SUPPORT is not set
+
+##
+## file: drivers/media/pci/saa7146/Kconfig
+##
+# CONFIG_VIDEO_HEXIUM_GEMINI is not set
+# CONFIG_VIDEO_HEXIUM_ORION is not set
+# CONFIG_VIDEO_MXB is not set
+
+##
 ## file: drivers/media/radio/Kconfig
 ##
-# CONFIG_RADIO_MAXIRADIO is not set
 # CONFIG_USB_DSBR is not set
+# CONFIG_RADIO_MAXIRADIO is not set
 
 ##
-## file: drivers/media/video/Kconfig
-##
-# CONFIG_VIDEO_ADV_DEBUG is not set
-# CONFIG_VIDEO_BWQCAM is not set
-# CONFIG_VIDEO_CQCAM is not set
-# CONFIG_VIDEO_W9966 is not set
-# CONFIG_VIDEO_MXB is not set
-# CONFIG_VIDEO_HEXIUM_ORION is not set
-# CONFIG_VIDEO_HEXIUM_GEMINI is not set
-
-##
-## file: drivers/media/video/et61x251/Kconfig
-##
-CONFIG_USB_ET61X251=m
-
-##
-## file: drivers/media/video/pwc/Kconfig
+## file: drivers/media/usb/pwc/Kconfig
 ##
 # CONFIG_USB_PWC is not set
 
 ##
-## file: drivers/media/video/sn9c102/Kconfig
+## file: drivers/media/usb/sn9c102/Kconfig
 ##
 # CONFIG_USB_SN9C102 is not set
 
@@ -576,11 +560,6 @@ CONFIG_VIA_RHINE=m
 CONFIG_PLIP=m
 
 ##
-## file: drivers/net/tokenring/Kconfig
-##
-# CONFIG_TR is not set
-
-##
 ## file: drivers/net/wan/Kconfig
 ##
 # CONFIG_WAN is not set
@@ -632,8 +611,6 @@ CONFIG_RTC_DRV_CMOS=y
 ##
 ## file: drivers/scsi/Kconfig
 ##
-CONFIG_SCSI=y
-CONFIG_BLK_DEV_SD=y
 # CONFIG_SCSI_MULTI_LUN is not set
 # CONFIG_SCSI_CONSTANTS is not set
 # CONFIG_SCSI_LOGGING is not set
@@ -647,11 +624,6 @@ CONFIG_SPI_BITBANG=m
 # CONFIG_SPI_BUTTERFLY is not set
 
 ##
-## file: drivers/telephony/Kconfig
-##
-# CONFIG_PHONE is not set
-
-##
 ## file: drivers/tty/Kconfig
 ##
 CONFIG_VT=y
@@ -661,12 +633,16 @@ CONFIG_VT_CONSOLE=y
 ##
 ## file: drivers/tty/serial/Kconfig
 ##
+# CONFIG_SERIAL_JSM is not set
+
+##
+## file: drivers/tty/serial/8250/Kconfig
+##
 CONFIG_SERIAL_8250=y
 CONFIG_SERIAL_8250_CONSOLE=y
 CONFIG_SERIAL_8250_NR_UARTS=4
 CONFIG_SERIAL_8250_RUNTIME_UARTS=4
 # CONFIG_SERIAL_8250_EXTENDED is not set
-# CONFIG_SERIAL_JSM is not set
 
 ##
 ## file: drivers/usb/Kconfig
@@ -699,11 +675,6 @@ CONFIG_FB_COBALT=m
 ## file: drivers/w1/Kconfig
 ##
 # CONFIG_W1 is not set
-
-##
-## file: fs/partitions/Kconfig
-##
-CONFIG_MSDOS_PARTITION=y
 
 ##
 ## file: init/Kconfig
@@ -813,4 +784,17 @@ CONFIG_SND_YMFPCI=m
 ## file: sound/pci/hda/Kconfig
 ##
 CONFIG_SND_HDA_INTEL=m
+
+##
+## file: unknown
+##
+# CONFIG_BLK_DEV_UB is not set
+# CONFIG_CPU_RM9000 is not set
+# CONFIG_MIPS_DB1200 is not set
+# CONFIG_MIPS_DB1550 is not set
+# CONFIG_MIPS_PB1100 is not set
+# CONFIG_MIPS_PB1500 is not set
+# CONFIG_MIPS_PB1550 is not set
+# CONFIG_MIPS_SIM is not set
+# CONFIG_PMC_YOSEMITE is not set
 

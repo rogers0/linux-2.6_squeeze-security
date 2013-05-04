@@ -1,105 +1,439 @@
-linux (3.2.44-1) UNRELEASED; urgency=low
+linux (3.8.5-1~experimental.1) experimental; urgency=high
 
   * New upstream stable update:
-    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.2.42
-    - TTY: do not reset master's packet mode
-    - l2tp: Restore socket refcount when sendmsg succeeds
-    - tun: add a missing nf_reset() in tun_net_xmit()
-    - netlabel: correctly list all the static label mappings
-    - sctp: Use correct sideffect command in duplicate cookie handling
-    - inet: limit length of fragment queue hash table bucket lists
-    - sfc: Properly sync RX DMA buffer when it is not the last in the page
-    - sfc: Fix efx_rx_buf_offset() in the presence of swiotlb
-    - sfc: Only use TX push if a single descriptor is to be written
-    - ext4: fix the wrong number of the allocated blocks in ext4_split_extent()
-    - jbd2: fix use after free in jbd2_journal_dirty_metadata()
-    - ext4: convert number of blocks to clusters properly
-    - ext4: use atomic64_t for the per-flexbg free_clusters count
-    - cifs: delay super block destruction until all cifsFileInfo objects are
-      gone
-    - USB: xhci: correctly enable interrupts (possibly fix for #703470)
-    - [amd64] Fix the failure case in copy_user_handle_tail()
-    - dm thin: fix discard corruption
-    - USB: serial: fix interface refcounting
-    - vfs,proc: guarantee unique inodes in /proc
-    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.2.43
-    - [armhf/mx5] ASoC: imx-ssi: Fix occasional AC97 reset failure
-    - rtlwifi: usb: add missing freeing of skbuff
-    - xen-blkback: fix dispatch_rw_block_io() error path
-    - net/irda: add missing error path release_sock call
-    - sysfs: fix race between readdir and lseek
-    - sysfs: handle failure path correctly for readdir()
-    - NFSv4.1: Fix a race in pNFS layoutcommit
-    - usb: xhci: Fix TRB transfer length macro used for Event TRB.
-    - nfsd4: reject "negative" acl lengths
-    - Nest rename_lock inside vfsmount_lock
-    - [x86] iommu/amd: Make sure dma_ops are set for hotplug devices
-    - b43: A fix for DMA transmission sequence errors
-    - tg3: fix length overflow in VPD firmware parsing (CVE-2013-1929)
-    - reiserfs: Fix warning and inode leak when deleting inode with xattrs
-    - virtio: console: add locking around c_ovq operations
-    - mm: prevent mmap_cache race in find_vma()
-    - ixgbe: fix registration order of driver and DCA nofitication
-    - key: Fix resource leak
-    - udf: Fix bitmap overflow on large filesystems with small block size
-    - NFS: nfs_getaclargs.acl_len is a size_t
-    - loop: prevent bdev freeing while device in use
-    - sky2: Threshold for Pause Packet is set wrong
-    - 8021q: fix a potential use-after-free
-    - unix: fix a race condition in unix_release()
-    - atl1e: drop pci-msi support because of packet corruption
-      (possibly fixes: #577747)
-    - ipv6: don't accept multicast traffic with scope 0
-    - ipv6: don't accept node local multicast traffic from the wire
-    - pch_gbe: fix ip_summed checksum reporting on rx
-    - HID: microsoft: do not use compound literal (fixes FTBFS on m68k)
-    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.2.44
-    - USB: serial: fix use-after-free in TIOCMIWAIT
-    - hrtimer: Don't reinitialize a cpu_base lock on CPU_UP
-    - crypto: gcm - fix assumption that assoc has one segment
-    - sched_clock: Prevent 64bit inatomicity on 32bit systems
-    - can: gw: use kmem_cache_free() instead of kfree()
-    - spinlocks and preemption points need to be at least compiler barriers
-    - [x86] mm, paravirt: Fix vmalloc_fault oops during lazy MMU updates
-    - Btrfs: make sure nbytes are right after log replay
-    - kobject: fix kset_find_obj() race with concurrent last kobject_put()
-    - vfs: Revert spurious fix to spinning prevention in prune_icache_sb
-    - ath9k_htc: accept 1.x firmware newer than 1.3
-    - [armel] Fix kexec by setting outer_cache.inv_all for Feroceon
-    - hugetlbfs: add swap entry check in follow_hugetlb_page()
-    - kernel/signal.c: stop info leak via the tkill and the tgkill syscalls
-    - net: fix incorrect credentials passing
-    - writeback: fix dirtied pages accounting on redirty
-    - Btrfs: fix race between mmap writes and compression
-    - mtd: Disable mtdchar mmap on MMU systems
-    - fbcon: fix locking harder (Closes: #704933)
-    - hfsplus: fix potential overflow in hfsplus_file_truncate()
-    - [x86] KVM: Allow cross page reads and writes from cached translations.
-      (fixes regression in fix for CVE-2013-1796)
-    - sched: Convert BUG_ON()s in try_to_wake_up_local() to WARN_ON_ONCE()s
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.8.4
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.8.5
 
   [ Ben Hutchings ]
-  * Input: MT: add tracking and frame synchronisation to core
-  * Input: add support for Cypress PS/2 Trackpads (Closes: #703607),
-    thanks to Apollon Oikonomopoulos
-  * drm, agp: Update to 3.4.42:
-    - drm/i915: restrict kernel address leak in debugfs
-    - KMS: fix EDID detailed timing vsync parsing
-    - KMS: fix EDID detailed timing frame rate
-    - drm/radeon: add support for Richland APUs
-    - drm/radeon/benchmark: make sure bo blit copy exists before using it
-    - drm/i915: Don't clobber crtc->fb when queue_flip fails
-    - drm/i915: Use the correct size of the GTT for placing the per-process
-      entries
-    - udl: handle EDID failure properly.
-  * [rt] Update to 3.2.43-rt63
-  * debugfs: Document change of default mode
-  * iwlwifi: Do not request firmware API version 6 for IWL6005/6205
-    (Closes: #705655)
-  * bug script: Remove broken sound functions (Closes: #705619)
-  * [i386/486] udeb: Add lxfb to fb-modules (Closes: #705780)
+  * signal: Fix use of missing sa_restorer field (build regression
+    introduced by fix for CVE-2013-0914)
+  * udeb: Add hid-generic, hid-holtek-kbd, hid-lenovo-tpkbd,
+    hid-roccat-isku, hid-roccat-lua, hid-roccat-savu to input-modules
+  * cdc_ncm,cdc_mbim: Use NCM by default
+  * [rt] Update to 3.8.4-rt2 and reenable
+  * [rt] wireless: orinoco_usb is BROKEN
 
- -- Ben Hutchings <ben@decadent.org.uk>  Wed, 27 Mar 2013 14:10:40 +0000
+ -- Ben Hutchings <ben@decadent.org.uk>  Sun, 31 Mar 2013 07:35:31 +0100
+
+linux (3.8.3-1~experimental.1) experimental; urgency=high
+
+  * New upstream stable update:
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.8.3
+
+  [ Ben Hutchings ]
+  * aufs: Update to aufs3.8-20130311
+  * USB: cdc-wdm: fix buffer overflow (CVE-2013-1860)
+  * signal: always clear sa_restorer on execve (CVE-2013-0914)
+  * ext3: Fix format string issues (CVE-2013-1848)
+  * net/sctp: Validate parameter size for SCTP_GET_ASSOC_STATS (CVE-2013-1828)
+  * bridge: fix mdb info leaks
+  * rtnl: fix info leak on RTM_GETLINK request for VF devices
+  * dcbnl: fix various netlink info leaks
+  * ALSA: seq: Fix missing error handling in snd_seq_timer_open()
+
+  [ Ian Campbell ]
+  * arm: correct path to DTB files. Patch from Nobuhiro Iwamatsu.
+    (Closes: #703082)
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Tue, 19 Mar 2013 04:52:46 +0000
+
+linux (3.8.2-1~experimental.1) experimental; urgency=low
+
+  * New upstream stable update:
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.8.1
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.8.2
+
+  [ Ben Hutchings ]
+  * linux-image: Increase minimum version of initramfs-tools to 0.110~
+    which copes with the recently renamed EHCI and NFS modules
+  * genorig: Accept xz-compressed upstream tarballs and patches,
+    thanks to Sedat Dilek
+  * net: Enable USB_NET_CDC_MBIM as module (Closes: #701869)
+  * mfd,mmc,memstick: Enable MFD_RTSX_PCI, MMC_REALTEK_PCI and
+    MEMSTICK_REALTEK_PCI as modules, replacing RTS_PSTOR (Closes: #702108)
+  * [mips,mipsel] Add dependencies for HAVE_ARCH_TRANSPARENT_HUGEPAGE
+    (fixes FTBFS)
+
+  [ Aurelien Jarno ]
+  * [mips/octeon] Change HW_RANDOM and HW_RANDOM_OCTEON to modules.
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Thu, 07 Mar 2013 04:00:04 +0000
+
+linux (3.8-1~experimental.1) experimental; urgency=low
+
+  * New upstream release: http://kernelnewbies.org/Linux_3.8
+    - pidns: Support unsharing the pid namespace. (Closes: #595920)
+    - fsnotify: Rework locking and reference counting (Closes: #602966)
+
+  [ Ben Hutchings ]
+  * aufs: Update to aufs3.x-rcN-20130204
+  * sock_diag: Fix out-of-bounds access to sock_diag_handlers[]
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Mon, 25 Feb 2013 05:29:53 +0000
+
+linux (3.7.8-1~experimental.1) experimental; urgency=low
+
+  * New upstream stable update:
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.7.4
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.7.5
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.7.6
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.7.7
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.7.8
+
+  [ Ben Hutchings ]
+  * Add powerpcspe architecture, thanks to Roland Stigge (Closes: #693042)
+  * aufs: Hide CONFIG_AUFS_PROC_MAP, which requires a patch we don't apply
+    (Closes: #693332)
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Fri, 15 Feb 2013 00:42:03 +0000
+
+linux (3.7.3-1~experimental.1) experimental; urgency=low
+
+  * New upstream stable update:
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.7.2
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.7.3
+
+  [ Ben Hutchings ]
+  * [ia64] nouveau: Disable another bit of ACPI support (fixes FTBFS)
+  * [armhf/omap] Make OMAP_DMA built-in (fixes FTBFS)
+  * ath6kl: Do not use virt_addr_valid() (fixes FTBFS on mips,mipsel)
+  * [armel/iop32x,armel/ixp4xx,armel/orion5x] Make IPV6 a module again due
+    to kernel size limit (fixes FTBFS)
+  * ALSA: usb-audio: Avoid autopm calls after disconnection; Fix missing
+    autopm for MIDI input (Closes: #664068)
+  * [!x86] Disable ZRAM, ZSMALLOC as modules (Reopens: #676779), as they
+    really aren't portable yet.
+  * udeb: Remove ipv6-modules on all architectures/flavours where it's
+    now built-in (fixes FTBFS)
+
+  [ Ian Campbell ]
+  * [x86/xen] Update microcode driver to use new API.
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Fri, 18 Jan 2013 01:36:15 +0000
+
+linux (3.7.1-1~experimental.2) experimental; urgency=low
+
+  [ Ben Hutchings ]
+  * linux-headers-common: Include the include/uapi/asm-generic directory
+    (Closes: #696664)
+  * linux-headers-common: Do not use link-vmlinux.sh when cleaning external
+    modules (Closes: #696775)
+  * Enable ZRAM, ZSMALLOC as modules on all architectures (Closes: #676779)
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Sat, 05 Jan 2013 17:48:05 +0000
+
+linux (3.7.1-1~experimental.1) experimental; urgency=low
+
+  * New upstream release: http://kernelnewbies.org/Linux_3.7
+  * New upstream stable update:
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.7.1
+
+  [ maximilian attems ]
+  * Enable WIZNET_W5100, WIZNET_W5300, AMD_PHY, BCM87XX_PHY.
+
+  [ Ben Hutchings ]
+  * aufs: Update to aufs3.x-rcN-20121210
+  * [rt] Disable until it is updated for Linux 3.7 or later
+  * Make gcc-4.7 the default compiler
+  * [mips,mipsel,sparc] media/parpot: Disable VIDEO_PMS in all
+    configurations where the other parport video drivers are disabled
+  * [x86] fs: Re-enable PSTORE_RAM (formerly known as RAMOOPS) as module
+  * net/wireless: Enable WL_TI; re-enable WL1251 and WL12XX as modules
+  * staging: Enable RTLLIB; re-enable RTL8192E as module
+  * media: Enable IR_TTUSBIR as module, replacing LIRC_TTUSBIR
+  * media: Enable VIDEO_STK1160 as module, replacing EASYCAP
+  * [armhf/mx5] Update configuration:
+    - Enable MACH_IMX51_DT, replacing MACH_MX51_EFIKAMX (but not fully
+      working in this kernel version)
+    - Enable SOC_IMX53, replacing MACH_MX53_{EVK,SMD,LOCO,ARD}
+    - Re-enable MFD_MC13XXX_SPI (formerly included in MFD_MC13XXX)
+    - Enable PWM and re-enable PWM_IMX (formerly known as MXC_PWM)
+  * [i386] comedi: Re-enable COMEDI_ISA_DRIVERS
+  * [i386,alpha] media/radio: Enable V4L_RADIO_ISA_DRIVERS and re-enable
+    the ISA drivers
+  * PCI: Enable PCI_REALLOC_ENABLE_AUTO
+  * [x86] PCI: Enable PCI_PRI, PCI_PASID, PCI_IOAPIC
+  * [amd64] ACPI: Enable ACPI_BGRT
+  * net: Enable INET_UDP_DIAG, NET_IPVTI, PACKET_DIAG, UNIX_DIAG as modules
+  * netfilter: Enable NF_NAT_IPV6, IP6_NF_TARGET_MASQUERADE, IP6_NF_TARGET_NPT,
+    NF_CT_NETLINK_HELPER as modules
+  * net/sched: Enable NET_EMATCH_CANID, NET_EMATCH_IPSET as modules
+  * can: Enable CAN_PEAK_PCIEC, CAN_PEAK_PCMCIA, CAN_PEAK_USB as modules
+  * [i386] can: Enable CAN_CC770, CAN_CC770_ISA as module
+  * block: Enable BLK_DEV_NVME, BLK_DEV_PCIESSD_MTIP32XX as modules
+  * qla2xxx: Enable TCM_QLA2XXX as module
+  * team: Enable NET_TEAM_MODE_BROADCAST as module
+  * net: Enable VXLAN as module
+  * phy: Enable AT803X_PHY as module
+  * rt2800pci: Enable RT2800PCI_RT3290
+  * wireless/ti: Enable WL18XX as module
+  * ptp: Enable clock drivers along with associated net/PHY drivers
+  * [!x86] drm: Disable DRM_VMWGFX
+  * drm: Enable DRM_UDL as module
+    - Disable autoloading as it is incompatible with older versions of
+      xserver-xorg-video-displaylink
+  * [x86] drm: Enable DRM_AST, DRM_MGAG200 as modules
+    - Disable autoloading as they are incompatible with older versions of
+      xserver-xorg-video-ast and xserver-xorg-video-mga
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Mon, 24 Dec 2012 02:50:21 +0000
+
+linux (3.6.9-1~experimental.1) experimental; urgency=low
+
+  * New upstream stable update:
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.6.9
+
+  [ maximilian attems ]
+  * Enable NETFILTER_XT_TARGET_HMARK, NET_EMATCH_IPSET, USB_NET_QMI_WWAN.
+  * Enable more HID drivers.
+  * [x86] Enable INTEL_MEI.
+  * [ARM]: 7492/1: add strstr declaration for decompressors.
+
+  [ Ben Hutchings ]
+  * HID: Add Apple wireless keyboard 2011 ANSI to special driver list
+    (Closes: #694546)
+
+  [ Arnaud Patard ]
+  * [ARM]: add patch from staging-next to fix lis3l02dq on omap
+  * [ARM]: backport omap usb fixes to make it build again.
+  * Change musb Kconfig so that our configuration of USB_MUSB_OMAP2PLUS
+  is used and not set to 'm'.
+
+ -- maximilian attems <maks@debian.org>  Wed, 05 Dec 2012 16:16:50 +0100
+
+linux (3.6.8-1~experimental.1) experimental; urgency=low
+
+  * New upstream stable update:
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.6.7
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.6.8
+
+  [ Bastian Blank ]
+  * Enable POWER_SUPPLY, BLK_DEV_THROTTLING and NETPRIO_CGROUP.
+  * [amd64] Enable CRYPTO_CAMELLIA_X86_64, CRYPTO_SERPENT_AVX_X86_64 and
+    CRYPTO_TWOFISH_AVX_X86_64.
+  * [x86] Enable more platform drivers.
+  * [s390/s390x-tape, s390x/s390x-tape] Remove not longer supported image
+    variant.
+  * [s390, s390x] Enable support for transparent hugepages.
+  * Use XZ for kernel images if supported.
+
+  [ maximilian attems ]
+  * Enable DVB_USB_RTL28XXU. (closes: #692749)
+  * Enable SBP_TARGET. (closes: #685341)
+
+ -- maximilian attems <maks@debian.org>  Wed, 28 Nov 2012 18:35:41 +0100
+
+linux (3.6.6-1~experimental.1) experimental; urgency=low
+
+  * New upstream stable update:
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.6.5
+    - [x86] mm: Find_early_table_space based on ranges that are actually
+      being mapped (Closes: #692067)
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.6.6
+    - ext4: fix unjournaled inode bitmap modification (Closes: #692411)
+
+  [ Uwe Kleine-König ]
+  * [rt] bump to 3.6.4-rt10
+
+  [ Ben Hutchings ]
+  * [x86] staging: Re-enable ZSMALLOC as module, previously selected by
+    ZRAM but now a dependency (Closes: #692024)
+  * fs: Re-enable link security restrictions that are disabled by default
+    in 3.6.5
+  * [rt] Update to 3.6.6-rt17
+  * rc: Enable RC_DEVICES; re-enable LIRC; re-enable the drivers that
+    depend on those; enable IR_SANYO_DECODER and IR_IGUANA as modules
+
+  [ Bastian Blank ]
+  * [sparc] Remove IP_PNP, IP_PNP_RARP, NET_IPGRE and ARPD overrides.
+  * Enable IPv6 globally.
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Thu, 15 Nov 2012 04:49:50 +0000
+
+linux (3.6.4-1~experimental.1) experimental; urgency=low
+
+  * New upstream release: http://kernelnewbies.org/Linux_3.6
+  * New upstream stable update:
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.6.1
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.6.2
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.6.3
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.6.4
+
+  [ Ben Hutchings ]
+  * aufs: Update to aufs3.6-20121015
+  * cirrus: Disable by default, as it is currently incompatible with
+    xserver-xorg-video-cirrus. It can be forced to load with module
+    parameter modeset=1.
+
+  [ Uwe Kleine-König ]
+  * reenable the rt featureset using 3.6.3-rt8
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Mon, 29 Oct 2012 04:22:02 +0000
+
+linux (3.5.5-1~experimental.1) experimental; urgency=low
+
+  * New upstream stable update:
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.5.3
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.5.4
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.5.5
+
+  [ Ben Hutchings ]
+  * mfd: lpc_ich: Fix a 3.5 kernel regression for iTCO_wdt driver
+    (Closes: #686040)
+  * drm: Enable various drivers (Closes: #685479):
+    - [x86] Enable DRM_GMA500 (previously DRM_PSB) as module
+    - Enable DRM_CIRRUS_QEMU as module
+  * media/dvb: Enable DVB_USB_AF9035 as module (Closes: #687050)
+
+  [ Bastian Blank ]
+  * Remove superfluous dependency in debugging packages.
+
+ -- Bastian Blank <waldi@debian.org>  Thu, 04 Oct 2012 15:19:30 +0200
+
+linux (3.5.2-1~experimental.1) experimental; urgency=low
+
+  * New upstream stable update:
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.5.1
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.5.2
+
+  [ Ben Hutchings ]
+  * genorig: Fix linux_upstream_full compute for version with modifier,
+    thanks to Julien Danjou (Closes: #683824)
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Sun, 19 Aug 2012 21:36:04 +0100
+
+linux (3.5-1~experimental.1) experimental; urgency=low
+
+  * New upstream release: http://kernelnewbies.org/Linux_3.5
+
+  [ Ben Hutchings ]
+  * net: Enable OPENVSWITCH as module (Closes: #675010)
+  * aufs: Update to aufs3.5-20120730
+  * rt: Disable until it is updated for Linux 3.5 or later
+  * debian/copyright: Convert to machine-readable format (fka DEP-5)
+  * debian/copyright: Add copyright notice for newly-added Unicode data
+  * [x86] seccomp: Enable SECCOMP_FILTER
+  * [x86] applesmc: Update to Linux 3.6, including fixes for new MacBook models
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Wed, 01 Aug 2012 14:08:55 +0100
+
+linux (3.4.4-1~experimental.1) experimental; urgency=low
+
+  * New upstream stable update:
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.4.2
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.4.3
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.4.4
+
+  [ Ben Hutchings ]
+  * [ia64] Export <asm/cmpxchg.h> to userland (fixes FTBFS)
+  * [x86] Enable BATTERY_SBS as module (Closes: #662902)
+  * team: Enable NET_TEAM_MODE_LOADBALANCE as module
+  * [x32] Build a linux-libc-dev package
+  * input: Enable MOUSE_SYNAPTICS_USB (Closes: #678071)
+  * [x86] staging: zsmalloc: Finish conversion to a separate module
+    (Closes: #677273)
+  * [rt] Update to 3.4.4-rt13
+
+  [ Arnaud Patard ]
+  * [armel] disable FIPS, VGA_ARB, FTRACE on iop32x and ixp4xx to reduce
+  kernel size.
+  * [armel] disable virtio modules on all platforms except versatile
+  * [armel] enable PHYSMAP on all platforms except ixp4xx
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Tue, 26 Jun 2012 07:28:41 +0100
+
+linux-2.6 (3.4.1-1~experimental.1) experimental; urgency=low
+
+  * New upstream release: http://kernelnewbies.org/Linux_3.4
+  * New upstream stable update:
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.4.1
+
+  [ maximilian attems ]
+  * Enable DM_VERITY, NF_CONNTRACK_TIMEOUT, NF_CT_NETLINK_TIMEOUT,
+    IP_NF_MATCH_RPFILTER, IP6_NF_MATCH_RPFILTER, NETFILTER_NETLINK_ACCT,
+    NETFILTER_XT_MATCH_NFACCT, NET_SCH_PLUG, SCSI_UFSHCD, SCSI_VIRTIO,
+    NET_TEAM, ATH6KL.
+
+  [ Ben Hutchings ]
+  * DFSG: Remove the new vs6624 driver, which contains non-free firmware
+  * aufs: Update to aufs3.4-20120521
+  * [rt] Update to 3.4-rt8 and reenable
+
+ -- maximilian attems <maks@debian.org>  Wed, 06 Jun 2012 10:25:57 +0200
+
+linux-2.6 (3.3.6-1~experimental.1) experimental; urgency=low
+
+  * New upstream stable update:
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.3.5
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.3.6
+    - USB: cdc-wdm: fix race leading leading to memory corruption
+    - autofs: make the autofsv5 packet file descriptor use a packetized pipe
+      (Closes: #633423)
+    - PM / Hibernate: fix the number of pages used for hibernate/thaw buffering
+      (Closes: #659363)
+    - efi: Validate UEFI boot variables
+    - efivars: Improve variable validation
+    - fs/cifs: fix parsing of dfs referrals
+    - hfsplus: Fix potential buffer overflows (CVE-2012-2319)
+    - exit_signal: fix the "parent has changed security domain" logic
+    - net: l2tp: unlock socket lock before returning from l2tp_ip_sendmsg
+    - sky2: fix receive length error in mixed non-VLAN/VLAN traffic
+      (Closes: #492853)
+    - [s390] KVM: do store status after handling STOP_ON_STOP bit
+    - [s390] KVM: Sanitize fpc registers for KVM_SET_FPU
+    - KVM: Fix write protection race during dirty logging
+    - KVM: mmu_notifier: Flush TLBs before releasing mmu_lock
+    - KVM: Ensure all vcpus are consistent with in-kernel irqchip settings
+      (CVE-2012-1601)
+    - KVM: nVMX: Fix erroneous exception bitmap check
+    - KVM: VMX: Fix kvm_set_shared_msr() called in preemptible context
+    - KVM: lock slots_lock around device assignment
+    - hugepages: fix use after free bug in "quota" handling
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Fri, 18 May 2012 03:53:16 +0100
+
+linux-2.6 (3.3.4-1~experimental.1) experimental; urgency=low
+
+  * New upstream stable update:
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.3.3
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.3.4
+
+  [ Ben Hutchings ]
+  * [x86] dell-laptop: Terminate quirks list properly
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Tue, 01 May 2012 01:23:59 +0100
+
+linux-2.6 (3.3.2-1~experimental.1) experimental; urgency=low
+
+  * New upstream stable update:
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.3.1
+    http://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.3.2
+
+  [ Ben Hutchings ]
+  * [armel/iop32x] Add missing #includes (fixes FTBFS)
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Sun, 15 Apr 2012 16:36:13 +0100
+
+linux-2.6 (3.3-1~experimental.1) experimental; urgency=low
+
+  * New upstream release: http://kernelnewbies.org/Linux_3.3
+
+  [ Ben Hutchings ]
+  * [x86] crypto: Enable CRYPTO_SERPENT_SSE2_586, CRYPTO_SERPENT_SSE2_X86_64
+  * aufs: Update to aufs3.x-rcN-20120312
+  * IB: Enable INFINIBAND_SRPT as module (Closes: #663041)
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Wed, 21 Mar 2012 03:08:36 +0000
+
+linux-2.6 (3.3~rc6-1~experimental.1) experimental; urgency=low
+
+  * New upstream release candidate
+
+  [ Ben Hutchings ]
+  * aufs: Update to aufs3.x-rcN-20120123
+  * rt: Disable until it is updated for Linux 3.3 or later
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Sun, 04 Mar 2012 20:27:42 +0000
 
 linux (3.2.41-2) unstable; urgency=low
 

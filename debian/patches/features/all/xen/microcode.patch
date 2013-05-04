@@ -25,12 +25,10 @@ Takes from git://git.kernel.org/pub/scm/linux/kernel/git/jeremy/xen.git#upstream
  5 files changed, 216 insertions(+), 1 deletion(-)
  create mode 100644 arch/x86/kernel/microcode_xen.c
 
-Index: linux/arch/x86/include/asm/microcode.h
-===================================================================
---- linux.orig/arch/x86/include/asm/microcode.h	2012-10-30 23:27:11.000000000 +0000
-+++ linux/arch/x86/include/asm/microcode.h	2012-11-09 10:59:49.000000000 +0000
-@@ -61,4 +61,13 @@
- }
+--- a/arch/x86/include/asm/microcode.h
++++ b/arch/x86/include/asm/microcode.h
+@@ -63,4 +63,13 @@ static inline struct microcode_ops * __i
+ static inline void __exit exit_amd_microcode(void) {}
  #endif
  
 +#ifdef CONFIG_MICROCODE_XEN
@@ -43,11 +41,9 @@ Index: linux/arch/x86/include/asm/microcode.h
 +#endif
 +
  #endif /* _ASM_X86_MICROCODE_H */
-Index: linux/arch/x86/kernel/Makefile
-===================================================================
---- linux.orig/arch/x86/kernel/Makefile	2012-10-30 23:27:11.000000000 +0000
-+++ linux/arch/x86/kernel/Makefile	2012-11-09 10:59:49.000000000 +0000
-@@ -92,6 +92,7 @@
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -92,6 +92,7 @@ obj-$(CONFIG_PCSPKR_PLATFORM)	+= pcspeak
  microcode-y				:= microcode_core.o
  microcode-$(CONFIG_MICROCODE_INTEL)	+= microcode_intel.o
  microcode-$(CONFIG_MICROCODE_AMD)	+= microcode_amd.o
@@ -55,10 +51,8 @@ Index: linux/arch/x86/kernel/Makefile
  obj-$(CONFIG_MICROCODE)			+= microcode.o
  
  obj-$(CONFIG_X86_CHECK_BIOS_CORRUPTION) += check.o
-Index: linux/arch/x86/kernel/microcode_core.c
-===================================================================
---- linux.orig/arch/x86/kernel/microcode_core.c	2012-11-09 10:18:15.000000000 +0000
-+++ linux/arch/x86/kernel/microcode_core.c	2012-11-09 10:59:49.000000000 +0000
+--- a/arch/x86/kernel/microcode_core.c
++++ b/arch/x86/kernel/microcode_core.c
 @@ -84,6 +84,7 @@
  #include <linux/mm.h>
  #include <linux/syscore_ops.h>
@@ -66,8 +60,8 @@ Index: linux/arch/x86/kernel/microcode_core.c
 +#include <xen/xen.h>
  #include <asm/microcode.h>
  #include <asm/processor.h>
- 
-@@ -518,7 +519,9 @@
+ #include <asm/cpu_device_id.h>
+@@ -544,7 +545,9 @@ static int __init microcode_init(void)
  	struct cpuinfo_x86 *c = &cpu_data(0);
  	int error;
  
@@ -78,10 +72,8 @@ Index: linux/arch/x86/kernel/microcode_core.c
  		microcode_ops = init_intel_microcode();
  	else if (c->x86_vendor == X86_VENDOR_AMD)
  		microcode_ops = init_amd_microcode();
-Index: linux/arch/x86/kernel/microcode_xen.c
-===================================================================
---- /dev/null	1970-01-01 00:00:00.000000000 +0000
-+++ linux/arch/x86/kernel/microcode_xen.c	2012-11-09 10:59:49.000000000 +0000
+--- /dev/null
++++ b/arch/x86/kernel/microcode_xen.c
 @@ -0,0 +1,198 @@
 +/*
 + * Xen microcode update driver
@@ -281,15 +273,12 @@ Index: linux/arch/x86/kernel/microcode_xen.c
 +		return NULL;
 +	return &microcode_xen_ops;
 +}
-Index: linux/arch/x86/xen/Kconfig
-===================================================================
---- linux.orig/arch/x86/xen/Kconfig	2012-10-30 23:27:11.000000000 +0000
-+++ linux/arch/x86/xen/Kconfig	2012-11-09 11:00:42.000000000 +0000
-@@ -48,3 +48,7 @@
- 	help
+--- a/arch/x86/xen/Kconfig
++++ b/arch/x86/xen/Kconfig
+@@ -50,3 +50,6 @@ config XEN_DEBUG_FS
  	  Enable statistics output and various tuning options in debugfs.
  	  Enabling this option may incur a significant performance overhead.
-+
+ 
 +config MICROCODE_XEN
 +       def_bool y
 +       depends on XEN_DOM0 && MICROCODE

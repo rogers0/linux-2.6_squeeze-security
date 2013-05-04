@@ -7,8 +7,6 @@ CONFIG_ARCH_OMAP=y
 CONFIG_SMP=y
 CONFIG_SMP_ON_UP=y
 CONFIG_HIGHMEM=y
-CONFIG_LEDS=y
-CONFIG_LEDS_CPU=y
 CONFIG_NEON=y
 
 ##
@@ -32,7 +30,6 @@ CONFIG_OMAP_RESET_CLOCKS=y
 CONFIG_OMAP_MUX=y
 # CONFIG_OMAP_MUX_DEBUG is not set
 CONFIG_OMAP_MUX_WARNINGS=y
-CONFIG_OMAP_MCBSP=y
 CONFIG_OMAP_MBOX_FWK=y
 CONFIG_OMAP_MBOX_KFIFO_SIZE=256
 # CONFIG_OMAP_MPU_TIMER is not set
@@ -63,6 +60,12 @@ CONFIG_CRYPTO_DEV_OMAP_SHAM=m
 CONFIG_CRYPTO_DEV_OMAP_AES=m
 
 ##
+## file: drivers/dma/Kconfig
+##
+CONFIG_DMADEVICES=y
+CONFIG_DMA_OMAP=y
+
+##
 ## file: drivers/gpio/Kconfig
 ##
 CONFIG_GPIO_SYSFS=y
@@ -73,6 +76,11 @@ CONFIG_GPIO_TWL4030=y
 ##
 CONFIG_I2C_GPIO=y
 CONFIG_I2C_OMAP=y
+
+##
+## file: drivers/iio/Kconfig
+##
+CONFIG_IIO=m
 
 ##
 ## file: drivers/input/keyboard/Kconfig
@@ -113,6 +121,11 @@ CONFIG_MEDIA_SUPPORT=y
 CONFIG_MEDIA_CONTROLLER=y
 
 ##
+## file: drivers/media/platform/omap/Kconfig
+##
+CONFIG_VIDEO_OMAP2_VOUT=m
+
+##
 ## file: drivers/media/radio/Kconfig
 ##
 CONFIG_RADIO_ADAPTERS=y
@@ -123,11 +136,6 @@ CONFIG_RADIO_SI4713=m
 ## file: drivers/media/radio/wl128x/Kconfig
 ##
 CONFIG_RADIO_WL128X=m
-
-##
-## file: drivers/media/video/omap/Kconfig
-##
-CONFIG_VIDEO_OMAP2_VOUT=m
 
 ##
 ## file: drivers/misc/ti-st/Kconfig
@@ -165,13 +173,13 @@ CONFIG_MTD_ONENAND=y
 CONFIG_MTD_ONENAND_OMAP2=y
 
 ##
-## file: drivers/net/wireless/wl1251/Kconfig
+## file: drivers/net/wireless/ti/wl1251/Kconfig
 ##
 CONFIG_WL1251=m
 CONFIG_WL1251_SPI=m
 
 ##
-## file: drivers/net/wireless/wl12xx/Kconfig
+## file: drivers/net/wireless/ti/wl12xx/Kconfig
 ##
 CONFIG_WL12XX=m
 
@@ -201,11 +209,6 @@ CONFIG_SPI_OMAP24XX=y
 CONFIG_SPI_SPIDEV=y
 
 ##
-## file: drivers/staging/iio/Kconfig
-##
-CONFIG_IIO=m
-
-##
 ## file: drivers/staging/iio/accel/Kconfig
 ##
 CONFIG_LIS3L02DQ=m
@@ -231,9 +234,7 @@ CONFIG_USB=y
 ## file: drivers/usb/gadget/Kconfig
 ##
 CONFIG_USB_GADGET=y
-## choice: USB Peripheral Controller
 CONFIG_USB_GADGET_MUSB_HDRC=y
-## end choice
 ## choice: USB Gadget Drivers
 CONFIG_USB_ETH=m
 CONFIG_USB_ETH_RNDIS=y
@@ -254,8 +255,9 @@ CONFIG_USB_OHCI_HCD_OMAP3=y
 ## file: drivers/usb/musb/Kconfig
 ##
 CONFIG_USB_MUSB_HDRC=y
-## choice: Platform Glue Layer
 CONFIG_USB_MUSB_OMAP2PLUS=y
+## choice: MUSB DMA mode
+CONFIG_USB_INVENTRA_DMA=y
 ## end choice
 
 ##
@@ -264,6 +266,11 @@ CONFIG_USB_MUSB_OMAP2PLUS=y
 CONFIG_TWL4030_USB=y
 CONFIG_TWL6030_USB=y
 CONFIG_NOP_USB_XCEIV=y
+
+##
+## file: drivers/usb/phy/Kconfig
+##
+CONFIG_OMAP_USB2=y
 
 ##
 ## file: drivers/video/Kconfig
@@ -275,11 +282,6 @@ CONFIG_FB=y
 ## file: drivers/video/console/Kconfig
 ##
 CONFIG_FRAMEBUFFER_CONSOLE=y
-
-##
-## file: drivers/video/omap/Kconfig
-##
-CONFIG_FB_OMAP_BOOTLOADER_INIT=y
 
 ##
 ## file: drivers/video/omap2/displays/Kconfig
@@ -328,5 +330,10 @@ CONFIG_SND_SOC=m
 ##
 CONFIG_SND_OMAP_SOC=m
 CONFIG_SND_OMAP_SOC_RX51=m
-CONFIG_SND_OMAP_SOC_SDP4430=m
+
+##
+## file: unknown
+##
+CONFIG_LEDS=y
+CONFIG_LEDS_CPU=y
 
