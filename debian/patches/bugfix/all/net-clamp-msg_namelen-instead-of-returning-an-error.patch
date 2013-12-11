@@ -36,7 +36,7 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
  	kmsg->msg_control = compat_ptr(tmp3);
 --- a/net/socket.c
 +++ b/net/socket.c
-@@ -1979,7 +1979,7 @@ static int copy_msghdr_from_user(struct
+@@ -1970,7 +1970,7 @@ static int copy_msghdr_from_user(struct
  	if (copy_from_user(kmsg, umsg, sizeof(struct msghdr)))
  		return -EFAULT;
  	if (kmsg->msg_namelen > sizeof(struct sockaddr_storage))

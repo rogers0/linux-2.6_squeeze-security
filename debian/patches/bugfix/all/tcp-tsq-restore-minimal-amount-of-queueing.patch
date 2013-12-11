@@ -42,7 +42,7 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
 
 --- a/Documentation/networking/ip-sysctl.txt
 +++ b/Documentation/networking/ip-sysctl.txt
-@@ -571,9 +571,6 @@ tcp_limit_output_bytes - INTEGER
+@@ -588,9 +588,6 @@ tcp_limit_output_bytes - INTEGER
  	typical pfifo_fast qdiscs.
  	tcp_limit_output_bytes limits the number of bytes on qdisc
  	or device to reduce artificial RTT/cwnd and reduce bufferbloat.
@@ -54,7 +54,7 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
  tcp_challenge_ack_limit - INTEGER
 --- a/net/ipv4/tcp.c
 +++ b/net/ipv4/tcp.c
-@@ -810,12 +810,6 @@ static unsigned int tcp_xmit_size_goal(s
+@@ -806,12 +806,6 @@ static unsigned int tcp_xmit_size_goal(s
  		xmit_size_goal = min_t(u32, gso_size,
  				       sk->sk_gso_max_size - 1 - hlen);
  
@@ -69,7 +69,7 @@ Signed-off-by: David S. Miller <davem@davemloft.net>
  		/* We try hard to avoid divides here */
 --- a/net/ipv4/tcp_output.c
 +++ b/net/ipv4/tcp_output.c
-@@ -1871,8 +1871,12 @@ static bool tcp_write_xmit(struct sock *
+@@ -1875,8 +1875,12 @@ static bool tcp_write_xmit(struct sock *
  		 *  - better RTT estimation and ACK scheduling
  		 *  - faster recovery
  		 *  - high rates

@@ -1,3 +1,83 @@
+linux (3.12.3-1~exp1) experimental; urgency=medium
+
+  * New upstream stable update:
+    https://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.12.1
+    https://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.12.2
+    - libertas: potential oops in debugfs (CVE-2013-6378)
+    - exec/ptrace: fix get_dumpable() incorrect tests (CVE-2013-2929)
+    https://www.kernel.org/pub/linux/kernel/v3.x/ChangeLog-3.12.3
+
+  [ Ben Hutchings ]
+  * [rt] Update to 3.12.0-rt2 and reenable
+  * HID: Enable UHID as module (Closes: #729338)
+  * [sh4] Remove some accidental inconsistencies in config
+  * Enable CHECKPOINT_RESTORE (Closes: #682700)
+  * Enable JUMP_LABEL (Closes: #730071)
+  * [x86] staging: Enable CRYSTALHD as module (Closes: #730832)
+  * aufs: Update to aufs3.12-20131111 (no functional change)
+  * [rt] Update to 3.12.1-rt4
+  * udeb: Add snd-usb-hiface to sound-modules, thanks to Samuel Thibault
+    (Closes: #730418)
+  * linux-image-dbg: Use correct objcopy command when cross-compiling,
+    thanks to Jon Severinsson
+
+  [ Bastian Blank ]
+  * Use compiler name instead of Linux version in compiler meta-packages.
+
+  [ Ian Campbell ]
+  * [armhf]: Enable AHCI_IMX in armmp+lpae flavours.
+
+  [ Aurelien Jarno ]
+  * [mips/octeon] Add kernel udebs.
+  * [mipsel] Add a loongson-2e flavour.
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Thu, 05 Dec 2013 14:34:39 +0000
+
+linux (3.12-1~exp1) experimental; urgency=low
+
+  * New upstream release: http://kernelnewbies.org/Linux_3.12
+
+  [ Ben Hutchings ]
+  * namespaces: Enable USER_NS (Closes: #712870)
+    - Restrict creation of user namespaces to root (CAP_SYS_ADMIN) by
+      default (sysctl: kernel.unprivileged_userns_clone)
+  * aufs: Update to aufs3.x-rcN-20131104
+    - mmap() holds a reference to the union file as well as the branch file
+  * [armel/{iop32x,ixp4xx}] Disable BPF_JIT, MEMCG, USER_NS to reduce kernel
+    size
+  * [arm,x86,s390,s390x] Introduce linux-compiler meta-packages to allow use
+    of foreign linux-headers packages with a native multilib compiler
+  * perf/ftrace: Fix paranoid level for enabling function tracer
+    (CVE-2013-2930)
+  * media/usb/gspca: Enable USB_GSPCA_STK1135 as module
+  * net/ethernet: Enable I40E as module
+  * net/usb: Enable USB_NET_SR9700 as module
+  * net/wireless/rt2x00: Enable RT2800USB_RT3573
+  * openvswitch: Enable OPENVSWITCH_VXLAN
+  * net/sched: Enable NET_SCH_FQ as module
+  * [x86] HID: Enable I2C_HID as module (Closes: #729801)
+  * [x86] input/misc: Enable INPUT_IDEAPAD_SLIDEBAR as module
+  * [x86] fs: Enable LUSTRE_FS, LUSTRE_LLITE_LOOP, LNET_XPRT_IB as modules
+  * [x86] thermal: Enable INTEL_POWERCLAMP, X86_PKG_TEMP_THERMAL as modules
+  * [armhf/armmp] udeb: Add zlib-modules
+
+  [ Thorsten Glaser ]
+  * Update m68k config (Closes: #728392):
+    - enable COMPAT_BRK by explicit upstream (m68k maintainer) request
+    - re-enable FPU emulation after discussion upstream, by popular request
+    - disable ADB_MACIISI by upstream (Mac68k maintainer) request
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Sun, 17 Nov 2013 22:41:26 +0000
+
+linux (3.12~rc7-1~exp1) experimental; urgency=low
+
+  * New upstream release candidate
+
+  [ Ben Hutchings ]
+  * aufs: Update to aufs3.x-rcN-20131014
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Mon, 28 Oct 2013 04:12:20 +0000
+
 linux (3.11.10-1) unstable; urgency=medium
 
   * New upstream stable update:
