@@ -1,3 +1,9 @@
+linux-2.6 (2.6.32-48squeeze13+lsproduo1) squeeze-security; urgency=low
+
+  * add Buffalo Linkstation ProDuo support (armel-orion5x)
+
+ -- Roger Yan <roger@localet.com>  Sun, 25 May 2014 00:41:33 +0900
+
 linux-2.6 (2.6.32-48squeeze13) squeeze-lts; urgency=high
 
   * Add stable release 2.6.32.67:
