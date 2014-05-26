@@ -1,0 +1,158 @@
+diff --git a/arch/arm/mach-orion5x/lsproduo-setup.c b/arch/arm/mach-orion5x/lsproduo-setup.c
+index b4f13a7..bd7d1a3 100644
+--- a/arch/arm/mach-orion5x/lsproduo-setup.c
++++ b/arch/arm/mach-orion5x/lsproduo-setup.c
+@@ -194,8 +194,93 @@ static struct platform_device lsproduo_button_device = {
+ 
+ #define LSPRODUO_GPIO_FAN_LOW		17
+ #define LSPRODUO_GPIO_FAN_HIGH		14
++#define LSPRODUO_GPIO_FAN_LOCK		6
++
++static struct gpio_fan_alarm lsproduo_alarm = {
++	.gpio = LSPRODUO_GPIO_FAN_LOCK,
++};
++
++static struct gpio_fan_speed lsproduo_speeds[] = {
++	{
++		.rpm = 0,
++		.ctrl_val = 3,
++	}, {
++		.rpm = 1500,
++		.ctrl_val = 2,
++	}, {
++		.rpm = 3250,
++		.ctrl_val = 1,
++	}, {
++		.rpm = 5000,
++		.ctrl_val = 0,
++	},
++};
++
++static int lsproduo_gpio_list[] = {
++	LSPRODUO_GPIO_FAN_HIGH, LSPRODUO_GPIO_FAN_LOW,
++};
++
++static struct gpio_fan_platform_data lsproduo_fan_data = {
++	.num_ctrl = ARRAY_SIZE(lsproduo_gpio_list),
++	.ctrl = lsproduo_gpio_list,
++	.alarm = &lsproduo_alarm,
++	.num_speed = ARRAY_SIZE(lsproduo_speeds),
++	.speed = lsproduo_speeds,
++};
++
++static struct platform_device lsproduo_fan_device = {
++	.name = "gpio-fan",
++	.id = -1,
++	.num_resources = 0,
++	.dev = {
++		.platform_data = &lsproduo_fan_data,
++	},
++};
+ 
+ static char lsproduo_fan_state[MAX_LEN];
++static int lsproduo_mpp_size;
++static char *lsproduo_mpp_txt[] = {
++	"MPP_GPIO LED_PWR",
++	"MPP_GPIO HDD_PWR",
++	"MPP_GPIO LED_ALARM",
++	"MPP_GPIO LED_INFO",
++	"MPP_UNUSED",
++	"MPP_UNUSED",
++	"MPP_GPIO FAN_LCK",
++#ifdef CONFIG_MACH_LINKSTATION_PRODUO_REV1
++	"MPP_GPIO INIT",
++	"MPP_GPIO POWER",
++#endif
++#ifdef CONFIG_MACH_LINKSTATION_PRODUO_REV2
++	"MPP_UNUSED",
++	"MPP_GPIO FUNC",
++#endif
++	"MPP_GPIO USB_PWR",
++#ifdef CONFIG_MACH_LINKSTATION_PRODUO_REV1
++	"MPP_GPIO AUTO_POWER",
++#endif
++#ifdef CONFIG_MACH_LINKSTATION_PRODUO_REV2
++	"MPP_GPIO POWER",
++#endif
++	"MPP_UNUSED LED_ETH dummy",
++	"MPP_UNUSED",
++	"MPP_UNUSED",
++	"MPP_GPIO FAN_HIGH",
++	"MPP_UNUSED",
++	"MPP_UNUSED",
++	"MPP_GPIO FAN_LOW",
++#ifdef CONFIG_MACH_LINKSTATION_PRODUO_REV1
++	"MPP_UNUSED",
++	"MPP_UNUSED",
++#endif
++#ifdef CONFIG_MACH_LINKSTATION_PRODUO_REV2
++	"MPP_GPIO LED_FUNC",
++	"MPP_GPIO USB_PWR2",
++	"MPP_UNUSED",
++	"MPP_UNUSED",
++	"MPP_GPIO AUTO_POWER",
++#endif
++};
+ 
+ #ifdef CONFIG_PROC_FS
+ static int proc_lsproduo_fan_show(struct seq_file *m, void *v)
+@@ -270,6 +355,27 @@ static const struct file_operations proc_fan_status_ops = {
+ 	.write	= proc_lsproduo_fan_write,
+ 	.release= single_release,
+ };
++
++static int proc_lsproduo_gpio_show(struct seq_file *m, void *v)
++{
++	int i;
++	for( i = 0; i < lsproduo_mpp_size; i ++) {
++		seq_printf(m, "gpio_state[%2d] %20s: 0x%x\n", i, lsproduo_mpp_txt[i], gpio_get_value(i));
++	}
++	return 0;
++}
++
++static int proc_lsproduo_gpio_open( struct inode *inode, struct file *file)
++{
++	return single_open(file, proc_lsproduo_gpio_show, NULL);
++}
++
++static const struct file_operations proc_gpio_status_ops = {
++	.open	= proc_lsproduo_gpio_open,
++	.read	= seq_read,
++	.llseek	= seq_lseek,
++	.release= single_release,
++};
+ #endif
+ 
+ /*****************************************************************************
+@@ -361,6 +467,12 @@ static void __init lsproduo_init(void)
+ 	/*
+ 	 * Setup basic Orion functions. Need to be called early.
+ 	 */
++	struct orion5x_mpp_mode *mode = lsproduo_mpp_modes;
++	lsproduo_mpp_size = 0;
++	while( mode->mpp >= 0) {
++			mode ++;
++			lsproduo_mpp_size ++;
++	}
+ 	orion5x_init();
+ 
+ 	orion5x_mpp_conf(lsproduo_mpp_modes);
+@@ -384,6 +496,8 @@ static void __init lsproduo_init(void)
+ 
+ 	platform_device_register(&lsproduo_leds);
+ 
++	platform_device_register(&lsproduo_fan_device);
++
+ 	i2c_register_board_info(0, &lsproduo_i2c_rtc, 1);
+ 
+ 	/* enable USB power */
+@@ -401,7 +515,8 @@ static void __init lsproduo_init(void)
+ #ifdef CONFIG_PROC_FS
+ 	proc_mkdir( "linkstation", NULL);
+ 	proc_mkdir( "linkstation/gpio", NULL);
+-	if( ! proc_create( "linkstation/gpio/fan", S_IWUSR | S_IRUGO, NULL, &proc_fan_status_ops)) {
++	if( ! proc_create( "linkstation/gpio/fan", S_IWUSR | S_IRUGO, NULL, &proc_fan_status_ops)
++		|| ! proc_create( "linkstation/gpio/list", S_IRUGO, NULL, &proc_gpio_status_ops)) {
+ 		printk( KERN_INFO "Error creating linkstation proc entry.\n");
+ 	}
+ #endif
