@@ -1,6 +1,6 @@
 Debian Squeeze Kernel for Linkstation Pro Duo
-(2.6.32-48squeeze7) 
 =============================================
+(2.6.32-48squeeze7) 
 
 For building linux-2.6.32 Debian Squeeze Kernel Deb-Package for Linkstation Pro Duo.
 Original source was migrated from Debian SVN for easy maintain.
@@ -10,8 +10,8 @@ Make kernel package (linux-image-2.6, etc)
 ----
 
 Here's the cross build script, confirmed working on Wheezy amd64 box.
-
 Step0, build tool preparation (need squeeze version due to gcc version requirement):
+
 	cat << EOT >> /etc/apt/sources.list
 	deb http://www.emdebian.org/debian wheezy main
 	deb http://www.emdebian.org/debian squeeze main
@@ -20,12 +20,16 @@ Step0, build tool preparation (need squeeze version due to gcc version requireme
 	EOT
 	aptitude update; aptitude install fakeroot debhelper devscripts g++-4.3-arm-linux-gnueabi xmlto
 	wget http://ftp.jp.debian.org/debian/pool/main/l/linux-2.6/linux-2.6_2.6.32.orig.tar.gz
+
 Step1, clone repo:
+
 	mkdir linux-2.6; cd $_; git init
 	git remote add origin https://github.com/rogeryan0/linux-2.6_squeeze-security
 	git fetch
 	git checkout -b master origin/linkstation-produo_stable
+
 Step2, package building:
+
 	export $(dpkg-architecture -aarmel)
 	fakeroot make -f debian/rules clean 2>&1 | tee ../log0_clean.log
 	mv .git ../linux-2.6.git; fakeroot make -f debian/rules orig 2>&1 | tee ../log1_orig.log; mv ../linux-2.6.git .git
