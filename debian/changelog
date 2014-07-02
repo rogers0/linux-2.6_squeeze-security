@@ -1,15 +1,20 @@
-linux-2.6 (2.6.32-48squeeze7+lsproduo2) UNRELEASED; urgency=low
+linux-2.6 (2.6.32-48squeeze8+lsproduo2) UNRELEASED; urgency=low
 
   * add Buffalo Linkstation ProDuo GPIO fan support and enable
     netconsole (armel-orion5x)
 
- -- Roger Yan <roger@localet.com>  Sat, 07 Jun 2014 23:39:18 +0900
+ -- Roger Yan <roger@localet.com>  Wed, 02 Jul 2014 22:55:18 +0900
 
-linux-2.6 (2.6.32-48squeeze7+lsproduo1) UNRELEASED; urgency=low
+linux-2.6 (2.6.32-48squeeze8) squeeze-lts; urgency=high
 
-  * add Buffalo Linkstation ProDuo support (armel-orion5x)
+  [ Moritz Muehlenhoff ]
+  * CVE-2014-3917: auditsc: audit_krule mask accesses need bounds checking
+  * CVE-2014-0203: fix autofs/afs/etc. magic mountpoint breakage
+  * CVE-2014-2678: rds: prevent dereference of a NULL device in rds_iw_laddr_check
+  * CVE-2014-4656: ALSA: control: Make sure that id->index does not overflow
+  * CVE-2014-4667: sctp: Fix sk_ack_backlog wrap-around problem
 
- -- Roger Yan <roger@localet.com>  Sat, 07 Jun 2014 23:28:33 +0900
+ -- Moritz Muehlenhoff <jmm@debian.org>  Tue, 01 Jul 2014 09:20:16 -0600
 
 linux-2.6 (2.6.32-48squeeze7) squeeze-lts; urgency=high
 
