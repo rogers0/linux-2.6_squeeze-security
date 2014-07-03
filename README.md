@@ -1,5 +1,5 @@
-Debian Squeeze Kernel for Linkstation Pro Duo
-=============================================
+Debian Squeeze Kernel for Linkstation Pro Duo / LS-WXL
+======================================================
 (2.6.32-48squeeze7) 
 
 For building linux-2.6.32 Debian Squeeze Kernel Deb-Package for Linkstation Pro Duo.
@@ -42,7 +42,7 @@ Step2, package building:
 Install the kernel package on Linkstation box
 ----
 
-Basiclly on a Debian system, "dpkg -i linux-image-xxx.deb" should get the kernel installed, but Marvell ARM board need a device ID at the head of the kernel image. And both kernel and initrd need to be repacked by mkimage. So here's the script:
+Basiclly on a Debian system, "dpkg -i linux-image-xxx.deb" should get the kernel installed, but Marvell Orion5x board need a device ID at the head of the kernel image. And both kernel and initrd need to be repacked by mkimage. So here's the script:
 
 	ver=2.6.32-5-orion5x
 	devio > foo 'wl 0xe3a01c07,4' 'wl 0xe3811027,4'
@@ -53,12 +53,20 @@ Basiclly on a Debian system, "dpkg -i linux-image-xxx.deb" should get the kernel
 	ln -sf /boot/vmlinuz.uimg-$ver /boot/uImage.buffalo
 	ln -sf /boot/initrd.uimg-$ver /boot/initrd.buffalo
 
+For newly Marvel Kirkwood board, it gets much simpler:
+
+	ver=2.6.32-5-orion5x
+	mkimage -A arm -O linux -T kernel -C none -a 0x00008000 -e 0x00008000 -n $ver -d /boot/boot/vmlinuz-$ver /boot/vmlinuz.uimg-$ver
+	mkimage -A arm -O linux -T ramdisk -C none -a 0x00008000 -e 0x00008000 -n $ver -d /boot/initrd.img-$ver /boot/initrd.uimg-$ver
+	ln -sf /boot/vmlinuz.uimg-$ver /boot/uImage.buffalo
+	ln -sf /boot/initrd.uimg-$ver /boot/initrd.buffalo
+
 
 ----
 Memo
 ----
 
-The original source is migrated from debian SVNi, but only keep the history after 2.6.32-48(r19819):
+The original source is migrated from debian SVN, but only keep the history after 2.6.32-48(r19819):
 	svn://svn.debian.org/kernel/dists/squeeze-security/linux-2.6/debian
 and the original source is saved, untouched, on "debian-svn" branch.
 

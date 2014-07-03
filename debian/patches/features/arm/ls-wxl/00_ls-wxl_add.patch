@@ -1,0 +1,49 @@
+diff --git a/arch/arm/mach-kirkwood/Kconfig b/arch/arm/mach-kirkwood/Kconfig
+index c16f1d4..b9b07ef 100644
+--- a/arch/arm/mach-kirkwood/Kconfig
++++ b/arch/arm/mach-kirkwood/Kconfig
+@@ -93,6 +93,12 @@ config MACH_T5325
+ 	  Say 'Y' here if you want your kernel to support the
+ 	  HP t5325 Thin Client.
+ 
++config MACH_LSWXL
++	bool "Buffalo LS-WXL Series"
++	help
++	  Say 'Y' here if you want your kernel to support the
++	  Buffalo LS-WXL Series.
++
+ endmenu
+ 
+ endif
+diff --git a/arch/arm/mach-kirkwood/Makefile b/arch/arm/mach-kirkwood/Makefile
+index 12a3728..b0b3e1f 100644
+--- a/arch/arm/mach-kirkwood/Makefile
++++ b/arch/arm/mach-kirkwood/Makefile
+@@ -12,5 +12,6 @@ obj-$(CONFIG_MACH_TS41X)		+= ts41x-setup.o
+ obj-$(CONFIG_MACH_DOCKSTAR)		+= dockstar-setup.o
+ obj-$(CONFIG_MACH_OPENRD)		+= openrd-setup.o
+ obj-$(CONFIG_MACH_T5325)		+= t5325-setup.o
++obj-$(CONFIG_MACH_LSWXL)		+= lswxl-setup.o
+ 
+ obj-$(CONFIG_CPU_IDLE)			+= cpuidle.o
+diff --git a/arch/arm/tools/mach-types b/arch/arm/tools/mach-types
+index 55590a4..9b65942 100644
+--- a/arch/arm/tools/mach-types
++++ b/arch/arm/tools/mach-types
+@@ -540,7 +540,7 @@ tidsc25			MACH_TIDSC25		TIDSC25			523
+ akcpmxl			MACH_AKCPMXL		AKCPMXL			524
+ av3xx			MACH_AV3XX		AV3XX			525
+ avila			MACH_AVILA		AVILA			526
+-pxa_mpm10		MACH_PXA_MPM10		PXA_MPM10		527
++lswxl			MACH_LSWXL		LSWXL			527
+ pxa_kyanite		MACH_PXA_KYANITE	PXA_KYANITE		528
+ sgold			MACH_SGOLD		SGOLD			529
+ oscar			MACH_OSCAR		OSCAR			530
+@@ -2994,7 +2994,6 @@ rubys			MACH_RUBYS		RUBYS			3008
+ aquarius		MACH_AQUARIUS		AQUARIUS		3009
+ mx53_ard		MACH_MX53_ARD		MX53_ARD		3010
+ mx53_smd		MACH_MX53_SMD		MX53_SMD		3011
+-lswxl			MACH_LSWXL		LSWXL			3012
+ dove_avng_v3		MACH_DOVE_AVNG_V3	DOVE_AVNG_V3		3013
+ sdi_ess_9263		MACH_SDI_ESS_9263	SDI_ESS_9263		3014
+ jocpu550		MACH_JOCPU550		JOCPU550		3015

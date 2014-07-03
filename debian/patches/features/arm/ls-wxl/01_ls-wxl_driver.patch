@@ -1,0 +1,226 @@
+diff --git a/arch/arm/mach-kirkwood/common.c b/arch/arm/mach-kirkwood/common.c
+index 80c8e50..5a68c08 100644
+--- a/arch/arm/mach-kirkwood/common.c
++++ b/arch/arm/mach-kirkwood/common.c
+@@ -32,6 +32,7 @@
+ #include <plat/orion_nand.h>
+ #include <plat/orion_wdt.h>
+ #include <plat/time.h>
++#include <asm/mach-types.h>
+ #include "common.h"
+ 
+ /*****************************************************************************
+@@ -853,9 +854,10 @@ int __init kirkwood_find_tclk(void)
+ 
+ 	kirkwood_pcie_id(&dev, &rev);
+ 
+-	if ((dev == MV88F6281_DEV_ID && (rev == MV88F6281_REV_A0 ||
++	if (((dev == MV88F6281_DEV_ID && (rev == MV88F6281_REV_A0 ||
+ 					rev == MV88F6281_REV_A1)) ||
+-	    (dev == MV88F6282_DEV_ID))
++	    (dev == MV88F6282_DEV_ID)) &&
++	    !machine_is_lswxl())		/* LS-WXL is underclocked */
+ 		return 200000000;
+ 
+ 	return 166666667;
+diff --git a/arch/arm/mach-kirkwood/include/mach/system.h b/arch/arm/mach-kirkwood/include/mach/system.h
+index 7568e95..cccf5a5 100644
+--- a/arch/arm/mach-kirkwood/include/mach/system.h
++++ b/arch/arm/mach-kirkwood/include/mach/system.h
+@@ -9,6 +9,8 @@
+ #ifndef __ASM_ARCH_SYSTEM_H
+ #define __ASM_ARCH_SYSTEM_H
+ 
++#include <linux/io.h>
++#include <asm/proc-fns.h>
+ #include <mach/bridge-regs.h>
+ 
+ static inline void arch_idle(void)
+diff --git a/arch/arm/mach-kirkwood/lswxl-setup.c b/arch/arm/mach-kirkwood/lswxl-setup.c
+new file mode 100644
+index 0000000..4e9d3a3
+--- /dev/null
++++ b/arch/arm/mach-kirkwood/lswxl-setup.c
+@@ -0,0 +1,182 @@
++/*
++ * arch/arm/mach-kirkwood/lswxl-setup.c
++ *
++ * Buffalo LS Kirkwood Series Setup
++ *
++ * This file is licensed under the terms of the GNU General Public
++ * License version 2.  This program is licensed "as is" without any
++ * warranty of any kind, whether express or implied.
++ */
++
++#include <linux/kernel.h>
++#include <linux/gpio.h>
++#include <linux/gpio_keys.h>
++#include <linux/init.h>
++#include <linux/input.h>
++#include <linux/leds.h>
++#include <linux/platform_device.h>
++#include <linux/ata_platform.h>
++#include <linux/mv643xx_eth.h>
++#include <asm/mach-types.h>
++#include <asm/mach/arch.h>
++#include "include/mach/system.h"
++#include <mach/kirkwood.h>
++#include "common.h"
++#include "mpp.h"
++
++static struct mv643xx_eth_platform_data lswxl_ge00_data = {
++	.phy_addr	= MV643XX_ETH_PHY_ADDR(0),
++};
++static struct mv643xx_eth_platform_data lswxl_ge01_data = {
++	.phy_addr	= MV643XX_ETH_PHY_ADDR(8),
++};
++
++static unsigned int lswxl_mpp_config[] __initdata = {
++	MPP8_GPIO,  /* HDD1 Error LED */
++	MPP28_GPIO, /* HDD1 Power */
++	MPP29_GPIO, /* HDD2 Power */
++	MPP34_GPIO, /* FUNC2 LED */
++	MPP36_GPIO, /* FUNC1 LED */
++	MPP37_GPIO, /* USB Vbus Power */
++	MPP38_GPIO, /* INFO LED */
++	MPP39_GPIO, /* POWER LED */
++	MPP40_GPIO, /* FAN Status */
++	MPP41_GPIO, /* FUNC Switch */
++	MPP42_GPIO, /* POWER Switch */
++	MPP43_GPIO, /* AUTO-POWER Switch*/
++	MPP46_GPIO, /* HDD1 Error LED*/
++	MPP47_GPIO, /* FAN High */
++	MPP48_GPIO, /* FAN Low  */
++	MPP49_GPIO, /* ALARM LED */
++	0
++};
++
++static struct mv_sata_platform_data lswxl_sata_data = {
++	.n_ports	= 2,
++};
++
++static struct gpio_led lswxl_led_pins[] = {
++	{
++		.name			= "func1",
++		.gpio			= 36,
++		.active_low		= 1,
++	},
++	{
++		.name			= "func2",
++		.gpio			= 34,
++		.active_low		= 0,
++	},
++	{
++		.name			= "alarm",
++		.gpio			= 49,
++		.active_low		= 1,
++	},
++	{
++		.name			= "info",
++		.gpio			= 38,
++		.active_low		= 1,
++	},
++	{
++		.name			= "power",
++		.gpio			= 39,
++		.default_trigger 	= "default-on",
++		.active_low		= 0,
++	},
++	{
++		.name			= "hdd1",
++		.gpio			= 8,
++		.active_low		= 0,
++	},
++	{
++		.name			= "hdd2",
++		.gpio			= 46,
++		.active_low		= 0,
++	},
++};
++
++static struct gpio_led_platform_data lswxl_led_data = {
++	.leds		= lswxl_led_pins,
++	.num_leds	= ARRAY_SIZE(lswxl_led_pins),
++};
++
++static struct platform_device lswxl_leds = {
++	.name	= "leds-gpio",
++	.id	= -1,
++	.dev	= {
++		.platform_data	= &lswxl_led_data,
++	}
++};
++
++#define LSWXL_GPIO_USB_VBUS_EN		37
++#define LSWXL_GPIO_KEY_FUNC		41
++
++static struct gpio_keys_button lswxl_buttons[] = {
++	{
++		.code		= KEY_OPTION,
++		.gpio		= LSWXL_GPIO_KEY_FUNC,
++		.desc		= "Function Button",
++		.active_low	= 1,
++	},
++};
++
++static struct gpio_keys_platform_data lswxl_button_data = {
++	.buttons	= lswxl_buttons,
++	.nbuttons	= ARRAY_SIZE(lswxl_buttons),
++};
++
++static struct platform_device lswxl_button_device = {
++	.name		= "gpio-keys",
++	.id		= -1,
++	.num_resources	= 0,
++	.dev		= {
++		.platform_data	= &lswxl_button_data,
++	},
++};
++
++static void lswxl_power_off(void)
++{
++	arch_reset(0, NULL);
++}
++
++static void __init lswxl_init(void)
++{
++	/*
++	 * Basic setup. Needs to be called early.
++	 */
++	kirkwood_init();
++	kirkwood_mpp_conf(lswxl_mpp_config);
++
++	kirkwood_uart0_init();
++
++	if (gpio_request(LSWXL_GPIO_USB_VBUS_EN, "USB Power Enable") != 0 ||
++		gpio_direction_output(LSWXL_GPIO_USB_VBUS_EN, 1) != 0)
++		printk(KERN_ERR "can't set up USB Power Enable\n");
++	kirkwood_ehci_init();
++
++	kirkwood_ge00_init(&lswxl_ge00_data);
++	kirkwood_ge01_init(&lswxl_ge01_data);
++
++	kirkwood_sata_init(&lswxl_sata_data);
++
++	kirkwood_spi_init();
++
++	platform_device_register(&lswxl_leds);
++	platform_device_register(&lswxl_button_device);
++
++	/* register power-off method */
++	pm_power_off = lswxl_power_off;
++
++	pr_info("%s: finished\n", __func__);
++}
++
++
++
++MACHINE_START(LSWXL, "Buffalo LS-WXL")
++	.phys_io	= KIRKWOOD_REGS_PHYS_BASE,
++	.io_pg_offst	= ((KIRKWOOD_REGS_VIRT_BASE) >> 18) & 0xfffc,
++	.boot_params	= 0x00000100,
++	.init_machine	= lswxl_init,
++	.map_io		= kirkwood_map_io,
++	.init_irq	= kirkwood_init_irq,
++	.timer		= &kirkwood_timer,
++MACHINE_END
