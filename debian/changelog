@@ -1,9 +1,3 @@
-linux-2.6 (2.6.32-48squeeze8+lsproduo1) UNRELEASED; urgency=low
-
-  * add Buffalo Linkstation ProDuo support (armel-orion5x)
-
- -- Roger Yan <roger@localet.com>  Wed, 02 Jul 2014 22:51:23 +0900
-
 linux-2.6 (2.6.32-48squeeze8) squeeze-lts; urgency=high
 
   [ Moritz Muehlenhoff ]
@@ -12,6 +6,10 @@ linux-2.6 (2.6.32-48squeeze8) squeeze-lts; urgency=high
   * CVE-2014-2678: rds: prevent dereference of a NULL device in rds_iw_laddr_check
   * CVE-2014-4656: ALSA: control: Make sure that id->index does not overflow
   * CVE-2014-4667: sctp: Fix sk_ack_backlog wrap-around problem
+
+  [ Raphael Geissert ]
+  * CVE-2014-3144-3145: netfilter: prevent OOB buffer access via nla
+    extensions.
 
  -- Moritz Muehlenhoff <jmm@debian.org>  Tue, 01 Jul 2014 09:20:16 -0600
 
@@ -23,6 +21,12 @@ linux-2.6 (2.6.32-48squeeze7) squeeze-lts; urgency=high
   * CVE-2014-3153: Privilege escalation in futex code
 
  -- Moritz Muehlenhoff <jmm@debian.org>  Thu, 05 Jun 2014 09:09:16 -0600
+
+linux-2.6 (2.6.32-48squeeze6+lsproduo1) UNRELEASED; urgency=low
+
+  * add Buffalo Linkstation ProDuo support (armel-orion5x)
+
+ -- Roger Yan <roger@localet.com>  Sun, 25 May 2014 00:41:33 +0900
 
 linux-2.6 (2.6.32-48squeeze6) squeeze-security; urgency=high
 
