@@ -2,8 +2,9 @@ Debian Squeeze Kernel for Linkstation Pro Duo / LS-WXL
 ======================================================
 (2.6.32-48squeeze7) 
 
-For building linux-2.6.32 Debian Squeeze Kernel Deb-Package for Linkstation Pro Duo.
+For building linux-2.6.32 Debian Squeeze Kernel Deb-Package for Linkstation Orion5x/Kirkwood.
 Original source was migrated from Debian SVN for easy maintain.
+Currently confirmed working on LS-ProDuo & LS-WXL.
 
 ----
 Make kernel package (linux-image-2.6, etc)
@@ -26,7 +27,7 @@ Step1, clone repo:
 	mkdir linux-2.6; cd $_; git init
 	git remote add origin https://github.com/rogeryan0/linux-2.6_squeeze-security
 	git fetch
-	git checkout -b master origin/linkstation-produo_stable
+	git checkout -b master origin/linkstation-kernel
 
 Step2, package building:
 
@@ -37,6 +38,11 @@ Step2, package building:
 	fakeroot make -f debian/rules.gen setup_armel_none_orion5x 2>&1 | tee ../log3_setup.log
 	fakeroot make -f debian/rules.gen binary-arch_armel_none_orion5x binary-indep DEBIAN_KERNEL_JOBS=4 2>&1 | tee ../log4_build.log
 
+Or for Kirkwood, final two lines need to be adjusted as follows:
+
+	fakeroot make -f debian/rules.gen setup_armel_none_kirkwood 2>&1 | tee ../log3_setup.log
+	fakeroot make -f debian/rules.gen binary-arch_armel_none_kirkwood binary-indep DEBIAN_KERNEL_JOBS=4 2>&1 | tee ../log4_build.log
+
 
 ----
 Install the kernel package on Linkstation box
@@ -45,21 +51,25 @@ Install the kernel package on Linkstation box
 Basiclly on a Debian system, "dpkg -i linux-image-xxx.deb" should get the kernel installed, but Marvell Orion5x board need a device ID at the head of the kernel image. And both kernel and initrd need to be repacked by mkimage. So here's the script:
 
 	ver=2.6.32-5-orion5x
-	devio > foo 'wl 0xe3a01c07,4' 'wl 0xe3811027,4'
-	cat foo /boot/vmlinuz-$ver > zImage
-	mkimage -A arm -O linux -T kernel -C none -a 0x00008000 -e 0x00008000 -n $ver -d zImage /boot/vmlinuz.uimg-$ver
-	rm foo zImage
-	mkimage -A arm -O linux -T ramdisk -C none -a 0x00008000 -e 0x00008000 -n $ver -d /boot/initrd.img-$ver /boot/initrd.uimg-$ver
-	ln -sf /boot/vmlinuz.uimg-$ver /boot/uImage.buffalo
-	ln -sf /boot/initrd.uimg-$ver /boot/initrd.buffalo
+	cd /boot
+	devio > /tmp/foo 'wl 0xe3a01c07,4' 'wl 0xe3811027,4'
+	cat foo /boot/vmlinuz-$ver > /tmp/zImage
+	mkimage -A arm -O linux -T kernel -C none -a 0x00008000 -e 0x00008000 -n $ver -d /tmp/zImage vmlinuz.uimg-$ver
+	rm /tmp/foo /tmp/zImage
+	mkimage -A arm -O linux -T ramdisk -C none -a 0x00008000 -e 0x00008000 -n $ver -d initrd.img-$ver initrd.uimg-$ver
+	ln -sf vmlinuz.uimg-$ver uImage.buffalo
+	ln -sf initrd.uimg-$ver initrd.buffalo
+	cd -
 
 For newly Marvel Kirkwood board, it gets much simpler:
 
-	ver=2.6.32-5-orion5x
-	mkimage -A arm -O linux -T kernel -C none -a 0x00008000 -e 0x00008000 -n $ver -d /boot/boot/vmlinuz-$ver /boot/vmlinuz.uimg-$ver
-	mkimage -A arm -O linux -T ramdisk -C none -a 0x00008000 -e 0x00008000 -n $ver -d /boot/initrd.img-$ver /boot/initrd.uimg-$ver
-	ln -sf /boot/vmlinuz.uimg-$ver /boot/uImage.buffalo
-	ln -sf /boot/initrd.uimg-$ver /boot/initrd.buffalo
+	ver=2.6.32-5-kirkwood
+	cd /boot
+	mkimage -A arm -O linux -T kernel -C none -a 0x00008000 -e 0x00008000 -n $ver -d vmlinuz-$ver vmlinuz.uimg-$ver
+	mkimage -A arm -O linux -T ramdisk -C none -a 0x00008000 -e 0x00008000 -n $ver -d initrd.img-$ver initrd.uimg-$ver
+	ln -sf vmlinuz.uimg-$ver uImage.buffalo
+	ln -sf initrd.uimg-$ver initrd.buffalo
+	cd -
 
 
 ----
