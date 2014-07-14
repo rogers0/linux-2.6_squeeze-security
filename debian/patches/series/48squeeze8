@@ -5,3 +5,10 @@
 + bugfix/all/CVE-2014-4656-2.patch
 + bugfix/all/CVE-2014-4667.patch
 + bugfix/all/CVE-2014-3144_CVE-2014-3145.patch
++ bugfix/all/CVE-2014-3122.patch
++ bugfix/all/CVE-2013-4387.patch
++ bugfix/all/CVE-2013-4470.patch
++ bugfix/all/CVE-2014-4699.patch
++ bugfix/all/CVE-2014-4652.patch
++ debian/alsa-avoid-abi-change-for-cve-2014-4652-fix.patch
+
