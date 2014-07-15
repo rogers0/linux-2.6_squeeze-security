@@ -1,9 +1,3 @@
-linux-2.6 (2.6.32-48squeeze7+lswxl1) UNRELEASED; urgency=low
-
-  * add Buffalo Linkstation LS-WXL support (armel-kirkwood)
-
- -- Roger Yan <roger@localet.com>  Thu, 03 Jul 2014 22:27:48 +0900
-
 linux-2.6 (2.6.32-48squeeze8) squeeze-lts; urgency=high
 
   [ Moritz Muehlenhoff ]
@@ -29,6 +23,12 @@ linux-2.6 (2.6.32-48squeeze8) squeeze-lts; urgency=high
     from sid to avoid ABI breakage.
 
  -- Holger Levsen <holger@debian.org>  Sat, 12 Jul 2014 16:17:33 +0000
+
+linux-2.6 (2.6.32-48squeeze7+lswxl1) UNRELEASED; urgency=low
+
+  * add Buffalo Linkstation LS-WXL support (armel-kirkwood)
+
+ -- Roger Yan <roger@localet.com>  Thu, 03 Jul 2014 22:27:48 +0900
 
 linux-2.6 (2.6.32-48squeeze7) squeeze-lts; urgency=high
 

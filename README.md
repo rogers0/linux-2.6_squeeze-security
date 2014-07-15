@@ -1,6 +1,5 @@
 Debian Squeeze Kernel for Linkstation Pro Duo / LS-WXL
 ======================================================
-(2.6.32-48squeeze7) 
 
 For building linux-2.6.32 Debian Squeeze Kernel Deb-Package for Linkstation Orion5x/Kirkwood.
 Original source was migrated from Debian SVN for easy maintain.
@@ -70,6 +69,15 @@ For newly Marvel Kirkwood board, it gets much simpler:
 	ln -sf vmlinuz.uimg-$ver uImage.buffalo
 	ln -sf initrd.uimg-$ver initrd.buffalo
 	cd -
+
+
+----
+Status
+----
+
+Confirmed to be working on the model below:
+
+ - LS-WXL (2.6.32-48squeeze8)
 
 
 ----
