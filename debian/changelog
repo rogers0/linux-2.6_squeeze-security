@@ -1,3 +1,370 @@
+linux-2.6 (2.6.32-48squeeze11) squeeze-lts; urgency=medium
+
+  * [x86] cpu, amd: Add workaround for family 16h, erratum 793 (CVE-2013-6885)
+  * [x86] tls: Validate TLS entries to protect espfix (CVE-2014-8133)
+  * [amd64] tls, ldt: Stop checking lm in LDT_empty
+  * [x86] tls: Interpret an all-zero struct user_desc as "no segment"
+  * [x86] kvm: Clear paravirt_enabled on KVM guests for espfix32's benefit
+    (CVE-2014-8134)
+  * netfilter: conntrack: disable generic tracking for known protocols
+    (CVE-2014-8160)
+  * isofs: Fix infinite looping over CE entries (CVE-2014-9420)
+  * isofs: Fix unchecked printing of ER records (CVE-2014-9584)
+  * [amd64] vdso: Fix the vdso address randomization algorithm (CVE-2014-9585)
+  * splice: Apply generic position and size checks to each write
+    (CVE-2014-7822)
+  * net: sctp: fix slab corruption from use after free on INIT collisions
+    (CVE-2015-1421)
+  * ASLR: fix stack randomization on 64-bit systems (CVE-2015-1593)
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Wed, 18 Feb 2015 02:41:42 +0000
+
+linux-2.6 (2.6.32-48squeeze10) squeeze-lts; urgency=medium
+
+  * Non-maintainer upload by the Squeeze LTS and Kernel Teams.
+  * New upstream stable release 2.6.32.65, see
+    http://lkml.org/lkml/2014/12/13/81 for more information.
+  * The stable release 2.6.32.65 includes the following new commits compared
+    to 2.6.32-48squeeze9:
+    - USB: whiteheat: Added bounds checking for bulk command response
+      (CVE-2014-3185)
+    - net: sctp: fix panic on duplicate ASCONF chunks (CVE-2014-3687)
+    - net: sctp: fix remote memory pressure from excessive queueing
+      (CVE-2014-3688)
+    - udf: Avoid infinite loop when processing indirect ICBs (CVE-2014-6410)
+    - net: sctp: fix NULL pointer dereference in af->from_addr_param on
+      malformed packet (CVE-2014-7841)
+    - mac80211: fix fragmentation code, particularly for encryption
+      (CVE-2014-8709)
+    - ttusb-dec: buffer overflow in ioctl (CVE-2014-8884)
+
+ -- Holger Levsen <holger@debian.org>  Sun, 21 Dec 2014 11:02:49 +0100
+
+linux-2.6 (2.6.32-48squeeze9) squeeze-lts; urgency=high
+
+  * Security upload by the Debian LTS team with support from the Debian Kernel
+    and Security Teams.
+  * New upstream stable release 2.6.32.64, see
+    https://lkml.org/lkml/2014/11/23/181 for more information.
+
+  [ Raphaël Hertzog ]
+  * The following upstream releases include many security fixes which
+    were already shipped in previous Debian releases.
+  * Add stable release 2.6.32.61:
+    - Revert "block: improve queue_should_plug() by looking at IO depths"
+    - 2.6.32.y: timekeeping: Fix nohz issue with commit
+      61b76840ddee647c0c223365378c3f394355b7d7
+    - clockevents: Don't allow dummy broadcast timers
+    - posix-cpu-timers: Fix nanosleep task_struct leak
+    - timer: Don't reinitialize the cpu base lock during CPU_UP_PREPARE
+    - tick: Cleanup NOHZ per cpu data on cpu down
+    - kbuild: Fix gcc -x syntax
+    - gen_init_cpio: avoid stack overflow when expanding
+    - coredump: prevent double-free on an error path in core dumper
+    - kernel/sys.c: call disable_nonboot_cpus() in kernel_restart()
+    - ring-buffer: Fix race between integrity check and readers
+    - genalloc: stop crashing the system when destroying a pool
+    - kernel/resource.c: fix stack overflow in __reserve_region_with_split()
+    - Driver core: treat unregistered bus_types as having no devices
+    - cgroup: remove incorrect dget/dput() pair in cgroup_create_dir()
+    - Fix a dead loop in async_synchronize_full()
+    - tracing: Don't call page_to_pfn() if page is NULL
+    - tracing: Fix double free when function profile init failed
+    - mm: Fix PageHead when !CONFIG_PAGEFLAGS_EXTENDED
+    - mm: bugfix: set current->reclaim_state to NULL while returning from
+      kswapd()
+    - mm: fix invalidate_complete_page2() lock ordering
+    - mempolicy: fix a race in shared_policy_replace()
+    - ALSA: hda - More ALC663 fixes and support of compatible chips
+      (Closes: #688564)
+    - ALSA: hda - Add a pin-fix for FSC Amilo Pi1505 (Closes: #599582)
+    - ALSA: seq: Fix missing error handling in snd_seq_timer_open()
+    - ALSA: ac97 - Fix missing NULL check in snd_ac97_cvol_new()
+    - x86, ioapic: initialize nr_ioapic_registers early in mp_register_ioapic()
+    - x86, random: make ARCH_RANDOM prompt if EMBEDDED, not EXPERT
+    - x86/xen: don't assume %ds is usable in xen_iret for 32-bit PVOPS.
+      (CVE-2013-0228)
+    - x86/mm: Check if PUD is large when validating a kernel address
+    - x86, mm, paravirt: Fix vmalloc_fault oops during lazy MMU updates
+    - xen/bootup: allow read_tscp call for Xen PV guests.
+    - xen/bootup: allow {read|write}_cr8 pvops call.
+    - MCE: Fix vm86 handling for 32bit mce handler
+    - ACPI / cpuidle: Fix NULL pointer issues when cpuidle is disabled
+    - alpha: Add irongate_io to PCI bus resources
+    - PARISC: fix user-triggerable panic on parisc
+    - serial: 8250, increase PASS_LIMIT
+    - drivers/char/ipmi: memcpy, need additional 2 bytes to avoid memory
+      overflow
+    - w1: fix oops when w1_search is called from netlink connector
+    - staging: comedi: ni_labpc: correct differential channel sequence for AI
+      commands
+    - staging: comedi: ni_labpc: set up command4 register *after* command3
+    - staging: comedi: comedi_test: fix race when cancelling command
+    - staging: comedi: fix memory leak for saved channel list
+    - staging: comedi: s626: don't dereference insn->data
+    - staging: comedi: jr3_pci: fix iomem dereference
+    - staging: comedi: don't dereference user memory for INSN_INTTRIG
+    - staging: comedi: check s->async for poll(), read() and write()
+    - staging: comedi: das08: Correct AO output for das08jr-16-ao
+    - staging: vt6656: [BUG] out of bound array reference in RFbSetPower.
+    - libata: fix Null pointer dereference on disk error
+    - scsi: Silence unnecessary warnings about ioctl to partition
+    - scsi: use __uX types for headers exported to user space
+    - fix crash in scsi_dispatch_cmd()
+    - SCSI: bnx2i: Fixed NULL ptr deference for 1G bnx2 Linux iSCSI offload
+    - crypto: cryptd - disable softirqs in cryptd_queue_worker to prevent data
+      corruption
+    - b43legacy: Fix crash on unload when firmware not available
+    - IPoIB: Fix use-after-free of multicast object
+    - telephony: ijx: buffer overflow in ixj_write_cid()
+    - xhci: Make handover code more robust
+    - USB: EHCI: go back to using the system clock for QH unlinks
+    - USB: whiteheat: fix memory leak in error path
+    - USB: serial: Fix memory leak in sierra_release()
+    - USB: mos7840: fix urb leak at release
+    - USB: mos7840: fix port-device leak in error path
+    - USB: garmin_gps: fix memory leak on disconnect
+    - USB: serial: ftdi_sio: Handle the old_termios == 0 case e.g.
+      uart_resume_port()
+    - USB: ftdi_sio: Quiet sparse noise about using plain integer was NULL
+      pointer
+    - epoll: prevent missed events on EPOLL_CTL_MOD
+    - fs/fscache/stats.c: fix memory leak
+    - sysfs: sysfs_pathname/sysfs_add_one: Use strlcat() instead of strcat()
+    - jbd: Delay discarding buffers in journal_unmap_buffer
+    - jbd: Fix assertion failure in commit code due to lacking transaction
+      credits
+    - jbd: Fix lock ordering bug in journal_unmap_buffer()
+    - ext4: Fix fs corruption when make_indexed_dir() fails
+    - ext4: don't dereference null pointer when make_indexed_dir() fails
+    - ext4: fix memory leak in ext4_xattr_set_acl()'s error path
+    - ext4: online defrag is not supported for journaled files
+    - ext4: always set i_op in ext4_mknod()
+    - ext4: fix fdatasync() for files with only i_size changes
+    - ext4: lock i_mutex when truncating orphan inodes
+    - ext4: fix race in ext4_mb_add_n_trim()
+    - ext4: limit group search loop for non-extent files
+    - udf: fix memory leak while allocating blocks during write
+    - udf: Fix bitmap overflow on large filesystems with small block size
+    - fs/cifs/cifs_dfs_ref.c: fix potential memory leakage
+    - hfsplus: fix potential overflow in hfsplus_file_truncate()
+    - btrfs: use rcu_barrier() to wait for bdev puts at unmount
+    - nfsd4: fix oops on unusual readlike compound
+    - net/core: Fix potential memory leak in dev_set_alias()
+    - net: reduce net_rx_action() latency to 2 HZ
+    - softirq: reduce latencies
+    - af_packet: remove BUG statement in tpacket_destruct_skb
+    - bridge: set priority of STP packets
+    - bonding: Fix slave selection bug.
+    - ipv4: check rt_genid in dst_check
+    - net_sched: gact: Fix potential panic in tcf_gact().
+    - net: sched: integer overflow fix
+    - net: prevent setting ttl=0 via IP_TTL
+    - net: guard tcp_set_keepalive() to tcp sockets
+      Fixes CVE-2012-6657
+    - tcp: allow splice() to build full TSO packets
+    - tcp: fix MSG_SENDPAGE_NOTLAST logic
+    - tcp: preserve ACK clocking in TSO
+    - unix: fix a race condition in unix_release()
+    - sctp: fix memory leak in sctp_datamsg_from_user() when copy from user
+      space fails
+    - net: sctp: sctp_setsockopt_auth_key: use kzfree instead of kfree
+    - net: sctp: sctp_endpoint_free: zero out secret key data
+    - net: sctp: sctp_auth_key_put: use kzfree instead of kfree
+    - netfilter: nf_ct_ipv4: packets with wrong ihl are invalid
+    - ipvs: allow transmit of GRO aggregated skbs
+    - ipvs: IPv6 MTU checking cleanup and bugfix
+    - isdnloop: fix and simplify isdnloop_init()
+    - mpt2sas: Send default descriptor for RAID pass through in mpt2ctl
+    - x86, ptrace: fix build breakage with gcc 4.7
+  * Add stable release 2.6.32.62:
+    - scsi: fix missing include linux/types.h in scsi_netlink.h
+    - Fix lockup related to stop_machine being stuck in __do_softirq.
+    - Revert "x86, ptrace: fix build breakage with gcc 4.7"
+    - x86, ptrace: fix build breakage with gcc 4.7 (second try)
+    - ipvs: fix CHECKSUM_PARTIAL for TCP, UDP
+    - staging: comedi: ni_65xx: (bug fix) confine insn_bits to one subdevice
+    - kernel/kmod.c: check for NULL in call_usermodehelper_exec()
+    - crypto: api - Fix race condition in larval lookup
+    - ipv6: tcp: fix panic in SYN processing
+    - tcp: must unclone packets before mangling them
+    - net: do not call sock_put() on TIMEWAIT sockets
+    - net: heap overflow in __audit_sockaddr()
+    - proc connector: fix info leaks
+    - can: dev: fix nlmsg size calculation in can_get_size()
+    - net: vlan: fix nlmsg size calculation in vlan_get_size()
+    - connector: use nlmsg_len() to check message length
+    - net: dst: provide accessor function to dst->xfrm
+    - sctp: Use software crc32 checksum when xfrm transform will happen.
+    - sctp: Perform software checksum if packet has to be fragmented.
+    - davinci_emac.c: Fix IFF_ALLMULTI setup
+    - resubmit bridge: fix message_age_timer calculation
+    - ipv6 mcast: use in6_dev_put in timer handlers instead of __in6_dev_put
+    - ipv4 igmp: use in_dev_put in timer handlers instead of __in_dev_put
+    - dm9601: fix IFF_ALLMULTI handling
+    - bonding: Fix broken promiscuity reference counting issue
+    - ll_temac: Reset dma descriptors indexes on ndo_open
+    - tcp: fix tcp_md5_hash_skb_data()
+    - ipv6: fix possible crashes in ip6_cork_release()
+    - ip_tunnel: fix kernel panic with icmp_dest_unreach
+    - net: sctp: fix NULL pointer dereference in socket destruction
+    - packet: packet_getname_spkt: make sure string is always 0-terminated
+    - neighbour: fix a race in neigh_destroy()
+    - net: Swap ver and type in pppoe_hdr
+    - sunvnet: vnet_port_remove must call unregister_netdev
+    - ifb: fix rcu_sched self-detected stalls
+    - dummy: fix oops when loading the dummy failed
+    - ifb: fix oops when loading the ifb failed
+    - vlan: fix a race in egress prio management
+    - arcnet: cleanup sizeof parameter
+    - sysctl net: Keep tcp_syn_retries inside the boundary
+    - sctp: fully initialize sctp_outq in sctp_outq_init
+    - net_sched: Fix stack info leak in cbq_dump_wrr().
+    - af_key: more info leaks in pfkey messages
+    - net_sched: info leak in atm_tc_dump_class()
+    - htb: fix sign extension bug
+    - net: check net.core.somaxconn sysctl values
+    - tcp: cubic: fix bug in bictcp_acked()
+    - ipv6: don't stop backtracking in fib6_lookup_1 if subtree does not match
+    - ipv6: drop packets with multiple fragmentation headers
+    - ipv6: Don't depend on per socket memory for neighbour discovery messages
+    - ICMPv6: treat dest unreachable codes 5 and 6 as EACCES, not EPROTO
+    - tipc: fix lockdep warning during bearer initialization
+    - net: Fix "ip rule delete table 256" (Closes: #724783)
+    - ipv6: use rt6_get_dflt_router to get default router in rt6_route_rcv
+    - random32: fix off-by-one in seeding requirement
+    - bonding: fix two race conditions in bond_store_updelay/downdelay
+    - isdnloop: use strlcpy() instead of strcpy()
+    - ipv4: fix possible seqlock deadlock
+    - net: rework recvmsg handler msg_name and msg_namelen logic
+      (CVE-2013-7266)
+    - net: add BUG_ON if kernel advertises msg_namelen > sizeof(struct
+      sockaddr_storage)
+    - net: clamp ->msg_namelen instead of returning an error
+    - ipv6: fix leaking uninitialized port number of offender sockaddr
+    - atm: idt77252: fix dev refcnt leak
+    - net: core: Always propagate flag changes to interfaces
+    - bridge: flush br's address entry in fdb when remove the bridge dev
+    - inet: fix possible seqlock deadlocks
+    - ipv6: fix possible seqlock deadlock in ip6_finish_output2
+    - {pktgen, xfrm} Update IPv4 header total len and checksum after
+      tranformation
+    - net: drop_monitor: fix the value of maxattr
+    - net: unix: allow bind to fail on mutex lock
+    - drivers/net/hamradio: Integer overflow in hdlcdrv_ioctl()
+    - net: rose: restore old recvmsg behavior
+    - net: llc: fix use after free in llc_ui_recvmsg
+    - inet_diag: fix inet_diag_dump_icsk() timewait socket state logic
+    - net: fix 'ip rule' iif/oif device rename
+    - bonding: 802.3ad: make aggregator_identifier bond-private
+    - net: sctp: fix sctp_connectx abi for ia32 emulation/compat mode
+    - virtio-net: alloc big buffers also when guest can receive UFO
+    - net: sctp: fix skb leakage in COOKIE ECHO path of chunk->auth_chunk
+    - net: socket: error on a negative msg_namelen
+    - netlink: don't compare the nul-termination in nla_strcmp
+    - isdnloop: several buffer overflows
+    - isdnloop: Validate NUL-terminated strings from user.
+    - sctp: unbalanced rcu lock in ip_queue_xmit()
+    - vm: add vm_iomap_memory() helper function
+    - Fix a few incorrectly checked [io_]remap_pfn_range() calls
+    - gianfar: disable TX vlan based on kernel 2.6.x
+    - powernow-k6: set transition latency value so ondemand governor can be used
+    - powernow-k6: disable cache when changing frequency
+    - powernow-k6: correctly initialize default parameters
+    - powernow-k6: reorder frequencies
+    - tcp: fix tcp_trim_head() to adjust segment count with skb MSS
+    - tcp_cubic: limit delayed_ack ratio to prevent divide error
+    - tcp_cubic: fix the range of delayed_ack
+  * Add stable release 2.6.32.63:
+    - ethtool: Report link-down while interface is down
+    - futex: Add another early deadlock detection check
+    - futex: Prevent attaching to kernel threads
+    - net: fix regression introduced in 2.6.32.62 by sysctl fixes
+  * Add stable release 2.6.32.64:
+    - x86_32, entry: Do syscall exit work on badsys (CVE-2014-4508)
+    - x86_32, entry: Store badsys error code in %eax
+    - x86_32, entry: Clean up sysenter_badsys declaration
+    - MIPS: Cleanup flags in syscall flags handlers.
+    - MIPS: asm: thread_info: Add _TIF_SECCOMP flag (CVE-2014-4157)
+    - sym53c8xx_2: Set DID_REQUEUE return code when aborting squeue
+    - tcp: fix tcp_match_skb_to_sack() for unaligned SACK at end of an skb
+    - igmp: fix the problem when mc leave group
+    - appletalk: Fix socket referencing in skb
+    - net: sctp: fix information leaks in ulpevent layer
+    - sunvnet: clean up objects created in vnet_new() on vnet_exit()
+    - ipv4: fix buffer overflow in ip_options_compile()
+    - net: sctp: inherit auth_capable on INIT collisions
+      Fixes CVE-2014-5077
+    - net: sendmsg: fix NULL pointer dereference
+    - tcp: Fix integer-overflows in TCP veno
+    - tcp: Fix integer-overflow in TCP vegas
+    - macvlan: Initialize vlan_features to turn on offload support.
+    - net: Correctly set segment mac_len in skb_segment().
+    - iovec: make sure the caller actually wants anything in memcpy_fromiovecend
+    - sctp: fix possible seqlock seadlock in sctp_packet_transmit()
+    - Revert "nfsd: correctly handle return value from nfsd_map_name_to_*"
+    - dm crypt: fix access beyond the end of allocated space
+    - gianfar: disable vlan tag insertion by default
+    - USB: kobil_sct: fix non-atomic allocation in write path
+    - fix misuses of f_count() in ppp and netlink
+    - net: sctp: fix skb_over_panic when receiving malformed ASCONF chunks
+    - tty: Fix high cpu load if tty is unreleaseable
+    - netfilter: nf_log: account for size of NLMSG_DONE attribute
+    - netfilter: nfnetlink_log: fix maximum packet length logged to userspace
+    - ring-buffer: Always reset iterator to reader page
+    - md/raid6: avoid data corruption during recovery of double-degraded RAID6
+    - net: pppoe: use correct channel MTU when using Multilink PPP
+    - ARM: 7668/1: fix memset-related crashes caused by recent GCC (4.7.2)
+      optimizations
+    - ARM: 7670/1: fix the memset fix
+    - lib/lzo: Update LZO compression to current upstream version
+    - Documentation: lzo: document part of the encoding
+    - lzo: check for length overrun in variable length encoding.
+    - USB: add new zte 3g-dongle's pid to option.c
+    - futex: Unlock hb->lock in futex_wait_requeue_pi() error path
+    - isofs: Fix unbounded recursion when processing relocated directories
+      Fixes CVE-2014-5471 CVE-2014-5472
+    - sctp: not send SCTP_PEER_ADDR_CHANGE notifications with failed probe
+  * Update the OpenVZ patch to apply on top of 2.6.32.64. Non-trivial changes
+    in net/ipv4/tcp_output.c.
+
+  [ Holger Levsen ]
+  * CVE-2014-4653: ALSA: control: Ensure possession of a read/write lock.
+  * CVE-2014-4654: ALSA: control: Check authorization for commands.
+  * CVE-2014-4655: ALSA: control: Maintain the user_ctl_count value properly.
+  * Ignore ABI change of  module:drivers/scsi/osd/libosd by listing it in
+    debian/config/defines
+
+  [ Raphael Geissert ]
+  * CVE-2014-4943: net: ppol2tp: don't fall back on UDP [get|set]sockopt
+
+  [ Ben Hutchings ]
+  * [openvz] tcp: Fix beancounting for tcp_unclone() calls introduced
+    in 2.6.32.62
+  * block: add missing blk_queue_dead() checks
+  * block: Fix blk_execute_rq_nowait() dead queue handling
+  * proc connector: Delete spurious memset in proc_exit_connector()
+  * vlan: Don't propagate flag changes on down interfaces.
+  * sctp: Fix double-free introduced by bad backport in 2.6.32.62
+  * net: sendmsg: Really fix NULL pointer dereference
+  * md/raid6: Fix misapplied backport in 2.6.32.64
+  * [amd64] Move K8 B step iret fixup to fault entry asm
+  * [amd64] Adjust frame type at paranoid_exit:
+  * [amd64] modify_ldt: Ban 16-bit segments on 64-bit kernels
+  * [i386] espfix: Remove filter for espfix32 due to race
+  * [amd64] espfix: Don't leak bits 31:16 of %esp returning to 16-bit
+  * [x86] espfix: Move espfix definitions into a separate header file
+  * [x86] espfix: Fix broken header guard
+  * [x86] espfix: Make espfix64 a Kconfig option, fix UML
+  * [x86] espfix: Make it possible to disable 16-bit support
+  * [amd64] entry/xen: Do not invoke espfix64 on Xen
+  * [x86] espfix/xen: Fix allocation of pages for paravirt page tables
+  * [amd64] traps: Stop using IST for #SS (CVE-2014-9090)
+  * [amd64] traps: Fix the espfix64 #DF fixup and rewrite it in C
+  * [amd64] traps: Rework bad_iret
+
+ -- Ben Hutchings <ben@decadent.org.uk>  Sun, 07 Dec 2014 18:20:15 +0000
+
 linux-2.6 (2.6.32-48squeeze8) squeeze-lts; urgency=high
 
   [ Moritz Muehlenhoff ]
@@ -325,6 +692,7 @@ linux-2.6 (2.6.32-46squeeze1) stable-security; urgency=high
   * xen: netback: shutdown the ring if it contains garbage (CVE-2013-0216)
   * xen: netback: correct netbk_tx_err() to handle wrap around (CVE-2013-0217)
   * xen: don't assume %ds is usable in xen_iret for 32-bit PVOPS (CVE-2013-0228)
+    [This applies only to kernel images with the xen featureset.]
 
  -- dann frazier <dannf@debian.org>  Thu, 14 Feb 2013 00:52:26 -0800
 
